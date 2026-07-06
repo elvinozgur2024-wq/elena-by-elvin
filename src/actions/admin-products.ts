@@ -116,9 +116,13 @@ export async function uploadProductImage(productId: string, formData: FormData) 
 
   const path = `${productId}/${crypto.randomUUID()}.webp`;
 
+  // Blob wrapper avoids a binary-corruption issue seen with raw Buffers on
+  // some storage-client code paths — see uploadSiteImage for details.
+  const blob = new Blob([new Uint8Array(optimized)], { type: "image/webp" });
+
   const { error: uploadError } = await supabase.storage
     .from("product-images")
-    .upload(path, optimized, { contentType: "image/webp" });
+    .upload(path, blob, { contentType: "image/webp" });
 
   if (uploadError) throw new Error("Görsel yüklenemedi");
 

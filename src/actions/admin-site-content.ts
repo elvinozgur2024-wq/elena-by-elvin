@@ -49,9 +49,16 @@ export async function uploadSiteImage(
   const slot = field === "hero_image_path" ? "hero" : "gift";
   const path = `site/${slot}.webp`;
 
+  // Wrap in a Blob rather than passing the raw Buffer directly — with
+  // upsert:true the storage client takes a different internal code path
+  // that was corrupting a plain Buffer's bytes (each invalid-UTF8 sequence
+  // replaced with U+FFFD) in the deployed Node runtime. A Blob is
+  // unambiguously binary and avoids that.
+  const blob = new Blob([new Uint8Array(optimized)], { type: "image/webp" });
+
   const { error: uploadError } = await supabase.storage
     .from("product-images")
-    .upload(path, optimized, { contentType: "image/webp", upsert: true });
+    .upload(path, blob, { contentType: "image/webp", upsert: true });
 
   if (uploadError) throw new Error("Görsel yüklenemedi");
 
