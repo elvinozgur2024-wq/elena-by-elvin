@@ -111,6 +111,7 @@ export interface Order {
   billing_address: ShippingAddressSnapshot | null;
   iyzico_payment_id: string | null;
   iyzico_conversation_id: string | null;
+  iyzico_token: string | null;
   payment_raw_response: unknown | null;
   created_at: string;
   updated_at: string;

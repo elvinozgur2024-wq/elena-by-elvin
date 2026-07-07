@@ -109,11 +109,17 @@ interface RawInitializeResponse {
   status: string;
   paymentPageUrl?: string;
   errorMessage?: string;
+  token?: string;
 }
 
 export async function initializeCheckoutForm(
   params: InitializeCheckoutParams,
-): Promise<{ status: string; paymentPageUrl?: string; errorMessage?: string }> {
+): Promise<{
+  status: string;
+  paymentPageUrl?: string;
+  errorMessage?: string;
+  token?: string;
+}> {
   const uriPath = "/payment/iyzipos/checkoutform/initialize/auth/ecom";
 
   const requestBody = {
@@ -164,6 +170,7 @@ export async function initializeCheckoutForm(
     status: result.status,
     paymentPageUrl: result.paymentPageUrl,
     errorMessage: result.errorMessage,
+    token: result.token,
   };
 }
 

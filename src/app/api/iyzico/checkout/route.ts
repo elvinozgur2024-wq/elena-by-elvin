@@ -261,9 +261,11 @@ async function handleCheckout(request: Request): Promise<NextResponse> {
       );
     }
 
+    // Store the token now — it's the only thing iyzico's callback hands
+    // back to us, so this is how we'll find this order again.
     await admin
       .from("orders")
-      .update({ iyzico_conversation_id: order.id })
+      .update({ iyzico_conversation_id: order.id, iyzico_token: result.token })
       .eq("id", order.id);
 
     return NextResponse.json({ paymentPageUrl: result.paymentPageUrl });
