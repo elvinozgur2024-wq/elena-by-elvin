@@ -214,6 +214,7 @@ export async function POST(request: Request) {
         // it here — iyzico's fraud checks expect a genuine identity number for
         // production transactions. The sandbox accepts this placeholder for testing.
         identityNumber: "11111111111",
+        registrationAddress: fullAddress,
         city: shipping.city,
         country: "Turkey",
         address: fullAddress,

@@ -23,6 +23,7 @@ export interface IyzicoBuyer {
   email: string;
   gsmNumber: string;
   identityNumber: string;
+  registrationAddress: string;
   city: string;
   country: string;
   address: string;
