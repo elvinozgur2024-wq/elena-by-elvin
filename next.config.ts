@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   // require), which bundlers can't statically resolve — keep it external so
   // Node's own require() handles it instead of Turbopack/webpack.
   serverExternalPackages: ["iyzipay"],
+  // serverExternalPackages alone isn't enough on Vercel: its file tracer also
+  // can't see the dynamic require() pattern, so the resource files silently
+  // don't make it into the deployed serverless function, crashing at runtime
+  // even though the build succeeds. Force-include the whole package.
+  outputFileTracingIncludes: {
+    "/api/iyzico/**": ["./node_modules/iyzipay/**"],
+  },
   images: {
     remotePatterns: [
       {
