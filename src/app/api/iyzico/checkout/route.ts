@@ -28,6 +28,21 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  try {
+    return await handleCheckout(request);
+  } catch (err) {
+    console.error("iyzico checkout route crashed:", err);
+    return NextResponse.json(
+      {
+        error: "Beklenmedik bir hata oluştu",
+        debug: err instanceof Error ? err.message : String(err),
+      },
+      { status: 500 },
+    );
+  }
+}
+
+async function handleCheckout(request: Request): Promise<NextResponse> {
   const body = await request.json();
   const parsed = requestSchema.safeParse(body);
 
@@ -252,7 +267,8 @@ export async function POST(request: Request) {
       .eq("id", order.id);
 
     return NextResponse.json({ paymentPageUrl: result.paymentPageUrl });
-  } catch {
+  } catch (err) {
+    console.error("iyzico initializeCheckoutForm failed:", err);
     await admin.from("orders").update({ status: "failed" }).eq("id", order.id);
     return NextResponse.json(
       { error: "Ödeme sağlayıcısına bağlanılamadı" },
