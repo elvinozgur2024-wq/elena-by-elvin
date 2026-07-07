@@ -10,7 +10,9 @@ const nextConfig: NextConfig = {
   // don't make it into the deployed serverless function, crashing at runtime
   // even though the build succeeds. Force-include the whole package.
   outputFileTracingIncludes: {
-    "/api/iyzico/**": ["./node_modules/iyzipay/**"],
+    "/api/iyzico/checkout": ["./node_modules/iyzipay/**/*"],
+    "/api/iyzico/callback": ["./node_modules/iyzipay/**/*"],
+    "/api/iyzico/**": ["./node_modules/iyzipay/**/*"],
   },
   images: {
     remotePatterns: [
