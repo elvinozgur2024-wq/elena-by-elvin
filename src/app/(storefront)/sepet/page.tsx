@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import { formatPrice } from "@/lib/format";
-import { productImageUrl } from "@/lib/supabase/storage";
+import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 import { calculateShippingFee, FREE_SHIPPING_THRESHOLD } from "@/lib/checkout/pricing";
 
 export default function CartPage() {
@@ -61,11 +61,11 @@ export default function CartPage() {
             >
               <Link
                 href={`/urun/${item.slug}`}
-                className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-tint-blush"
+                className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-border bg-white"
               >
                 {item.imagePath ? (
                   <Image
-                    src={productImageUrl(item.imagePath)}
+                    src={productImageUrl(item.imagePath, PRODUCT_IMAGE_VERSION)}
                     alt={item.name}
                     fill
                     sizes="96px"

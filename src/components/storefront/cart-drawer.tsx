@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { formatPrice } from "@/lib/format";
-import { productImageUrl } from "@/lib/supabase/storage";
+import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeItem } =
@@ -47,10 +47,10 @@ export function CartDrawer() {
                     key={`${item.productId}-${item.variantId}`}
                     className="flex gap-3"
                   >
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-tint-blush">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-border bg-white">
                       {item.imagePath ? (
                         <Image
-                          src={productImageUrl(item.imagePath)}
+                          src={productImageUrl(item.imagePath, PRODUCT_IMAGE_VERSION)}
                           alt={item.name}
                           fill
                           sizes="80px"
