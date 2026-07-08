@@ -12,6 +12,9 @@ const envSchema = z.object({
     .optional()
     .transform((v) => v === "true"),
   NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
+  RESEND_API_KEY: z.string().min(1).optional(),
+  RESEND_FROM_EMAIL: z.string().email().optional(),
+  ORDER_NOTIFICATION_EMAIL: z.string().email().optional(),
 });
 
 const parsed = envSchema.safeParse({
@@ -23,6 +26,9 @@ const parsed = envSchema.safeParse({
   IYZICO_BASE_URL: process.env.IYZICO_BASE_URL,
   NEXT_PUBLIC_PAYMENTS_LIVE: process.env.NEXT_PUBLIC_PAYMENTS_LIVE,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+  ORDER_NOTIFICATION_EMAIL: process.env.ORDER_NOTIFICATION_EMAIL,
 });
 
 if (!parsed.success) {

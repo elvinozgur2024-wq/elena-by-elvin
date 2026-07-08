@@ -1,7 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { retrieveCheckoutForm } from "@/lib/iyzico/client";
+import { sendOrderNotificationEmail } from "@/lib/email/order-notification";
 import { env } from "@/lib/env";
+import type { OrderWithItems } from "@/types/database.types";
 
 // iyzico POSTs to this endpoint, so redirects must use 303 (See Other) — the
 // default 307 preserves the POST method, making the browser re-POST to the
@@ -78,6 +80,31 @@ export async function POST(request: Request) {
           });
         }
       }
+
+      // Fire the order-notification email after the redirect response is
+      // sent (via `after`), so a slow or failing email provider never delays
+      // the buyer's checkout flow. sendOrderNotificationEmail never throws.
+      after(async () => {
+        const { data: fullOrder } = await admin
+          .from("orders")
+          .select("*, order_items(*)")
+          .eq("id", order.id)
+          .maybeSingle();
+        if (!fullOrder) return;
+
+        let buyerEmail = fullOrder.guest_email;
+        if (!buyerEmail && fullOrder.customer_id) {
+          const { data: authUser } = await admin.auth.admin.getUserById(
+            fullOrder.customer_id,
+          );
+          buyerEmail = authUser.user?.email ?? null;
+        }
+
+        await sendOrderNotificationEmail(
+          fullOrder as unknown as OrderWithItems,
+          buyerEmail,
+        );
+      });
 
       return redirect(`/odeme/basarili?order=${order.order_number}`);
     }
