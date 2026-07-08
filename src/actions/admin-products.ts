@@ -108,10 +108,14 @@ export async function uploadProductImage(productId: string, formData: FormData) 
   const file = formData.get("file") as File | null;
   if (!file) throw new Error("Dosya bulunamadı");
 
+  // The admin uploader removes the studio background in the browser (imgly
+  // WASM) before upload, so the incoming file already has a transparent
+  // background. We only optimize + preserve that alpha here — keeping the
+  // ML runtime out of the Vercel serverless bundle entirely.
   const buffer = Buffer.from(await file.arrayBuffer());
   const optimized = await sharp(buffer)
     .resize(1600, 1600, { fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 82 })
+    .webp({ quality: 82, alphaQuality: 100 })
     .toBuffer();
 
   const path = `${productId}/${crypto.randomUUID()}.webp`;

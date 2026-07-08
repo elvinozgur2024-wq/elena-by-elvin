@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local-only backup of original product photos before the ML cutout pass
+# (duplicates the originals already tracked under .claude/)
+.claude/pre-cutout-backup/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

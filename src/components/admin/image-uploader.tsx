@@ -25,18 +25,36 @@ export function ImageUploader({
   const [isPending, startTransition] = useTransition();
   const [dragOver, setDragOver] = useState(false);
 
+  const [status, setStatus] = useState<string | null>(null);
+
   function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     startTransition(async () => {
+      // Load the ML background remover lazily (it pulls a ~40MB WASM model on
+      // first use) so it never weighs down the rest of the admin panel.
+      const { removeBackground } = await import("@imgly/background-removal");
+
       for (const file of Array.from(files)) {
-        const formData = new FormData();
-        formData.set("file", file);
         try {
+          setStatus(`"${file.name}" arka planı kaldırılıyor...`);
+          const cutout = await removeBackground(file, {
+            output: { format: "image/png" },
+          });
+
+          setStatus(`"${file.name}" yükleniyor...`);
+          const cutoutFile = new File(
+            [cutout],
+            file.name.replace(/\.[^.]+$/, ".png"),
+            { type: "image/png" },
+          );
+          const formData = new FormData();
+          formData.set("file", cutoutFile);
           await uploadProductImage(productId, formData);
         } catch {
           toast.error(`"${file.name}" yüklenemedi`);
         }
       }
+      setStatus(null);
     });
   }
 
@@ -62,7 +80,7 @@ export function ImageUploader({
         <UploadSimple className="h-6 w-6 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
           {isPending
-            ? "Yükleniyor..."
+            ? (status ?? "Yükleniyor...")
             : "Görsel yüklemek için tıklayın veya sürükleyin"}
         </p>
         <input

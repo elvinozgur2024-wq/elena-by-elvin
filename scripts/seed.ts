@@ -382,10 +382,16 @@ const PRODUCTS: SeedProduct[] = [
 ];
 
 async function uploadImage(productSlug: string, image: SeedImage) {
-  const source = await readFile(path.join(ASSETS_DIR, image.file));
+  // Prefer the transparent ML cutout from scripts/generate-cutouts.mjs; fall
+  // back to the raw studio photo if cutouts haven't been generated yet.
+  const base = image.file.replace(/\.[a-z]+$/i, "");
+  const cutoutPath = path.join(ASSETS_DIR, "cutouts", `${base}.png`);
+  const source = await readFile(cutoutPath).catch(() =>
+    readFile(path.join(ASSETS_DIR, image.file)),
+  );
   const optimized = await sharp(source)
     .resize(1600, 1600, { fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 82 })
+    .webp({ quality: 82, alphaQuality: 100 })
     .toBuffer();
 
   const storagePath = `${productSlug}/${randomUUID()}.webp`;
