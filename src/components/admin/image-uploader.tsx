@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
 import { Star, Trash, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { productImageUrl } from "@/lib/supabase/storage";
+import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 import {
   deleteProductImage,
   setPrimaryImage,
@@ -74,7 +74,7 @@ export function ImageUploader({
         onClick={() => inputRef.current?.click()}
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-8 text-center transition-colors",
-          dragOver ? "border-primary bg-tint-blush" : "border-border",
+          dragOver ? "border-primary bg-secondary" : "border-border",
         )}
       >
         <UploadSimple className="h-6 w-6 text-muted-foreground" />
@@ -98,10 +98,10 @@ export function ImageUploader({
           {images.map((image) => (
             <div
               key={image.id}
-              className="group relative aspect-square overflow-hidden rounded-xl bg-tint-blush"
+              className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-white"
             >
               <Image
-                src={productImageUrl(image.storage_path)}
+                src={productImageUrl(image.storage_path, PRODUCT_IMAGE_VERSION)}
                 alt={image.alt_text ?? ""}
                 fill
                 sizes="150px"

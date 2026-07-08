@@ -40,7 +40,7 @@ export function SiteImageUploader({
       <p className="mb-2 text-sm font-medium text-foreground">{label}</p>
       <div
         onClick={() => inputRef.current?.click()}
-        className="relative aspect-video w-full max-w-sm cursor-pointer overflow-hidden rounded-2xl border border-dashed border-border bg-tint-blush"
+        className="relative aspect-video w-full max-w-sm cursor-pointer overflow-hidden rounded-2xl border border-dashed border-border bg-secondary"
       >
         {imagePath ? (
           <Image

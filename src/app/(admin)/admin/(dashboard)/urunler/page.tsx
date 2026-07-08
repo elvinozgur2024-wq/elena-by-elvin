@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getAllProductsAdmin } from "@/lib/data/admin";
 import { formatPrice } from "@/lib/format";
-import { productImageUrl } from "@/lib/supabase/storage";
+import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 
 export default async function AdminProductsPage() {
   const products = await getAllProductsAdmin();
@@ -45,10 +45,10 @@ export default async function AdminProductsPage() {
                       href={`/admin/urunler/${product.id}`}
                       className="flex items-center gap-3"
                     >
-                      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-tint-blush">
+                      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-border bg-white">
                         {primary ? (
                           <Image
-                            src={productImageUrl(primary.storage_path)}
+                            src={productImageUrl(primary.storage_path, PRODUCT_IMAGE_VERSION)}
                             alt=""
                             fill
                             sizes="40px"
