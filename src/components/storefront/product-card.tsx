@@ -7,6 +7,7 @@ import { Plus } from "@phosphor-icons/react";
 import { formatPrice } from "@/lib/format";
 import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 import { useCartStore } from "@/lib/cart/store";
+import { WishlistButton } from "@/components/storefront/wishlist-button";
 import type { ProductWithImages } from "@/types/database.types";
 
 export function ProductCard({ product }: { product: ProductWithImages }) {
@@ -63,6 +64,12 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
             İndirim
           </span>
         ) : null}
+
+        <WishlistButton
+          productId={product.id}
+          revealOnHover
+          className="absolute right-3 top-3"
+        />
 
         {soldOut ? (
           <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-2.5 py-1 text-[11px] font-medium tracking-wide text-background">

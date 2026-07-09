@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Minus, Plus } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { WishlistButton } from "@/components/storefront/wishlist-button";
 import { useCartStore } from "@/lib/cart/store";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -107,6 +108,8 @@ export function AddToCartForm({
         >
           {outOfStock ? "Stokta Yok" : "Sepete Ekle"}
         </Button>
+
+        <WishlistButton productId={productId} size="lg" />
       </div>
       {!outOfStock && stock <= 5 ? (
         <p className="text-xs text-primary">Son {stock} ürün!</p>

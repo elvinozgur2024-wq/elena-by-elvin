@@ -101,3 +101,44 @@ export async function getRelatedProducts(
   if (error) throw error;
   return (data as unknown as ProductWithImages[]).map(sortProduct);
 }
+
+export async function getProductsByIds(
+  ids: string[],
+): Promise<ProductWithImages[]> {
+  if (ids.length === 0) return [];
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .eq("is_active", true)
+    .in("id", ids);
+
+  if (error) throw error;
+  return (data as unknown as ProductWithImages[]).map(sortProduct);
+}
+
+// Small catalog (tens of products), so a simple in-memory substring match
+// across name/description/category is plenty — avoids building `.or()`
+// filter strings from raw user input (PostgREST's filter syntax treats
+// commas/parens as structural, so unescaped user text there is fragile) and
+// avoids needing a tsvector column for a catalog this size.
+export async function searchProducts(
+  query: string,
+): Promise<ProductWithImages[]> {
+  const needle = query.trim().toLocaleLowerCase("tr");
+  if (!needle) return [];
+
+  const products = await getProducts();
+  return products.filter((product) => {
+    const haystack = [
+      product.name,
+      product.short_description,
+      product.description,
+      product.category?.name,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLocaleLowerCase("tr");
+    return haystack.includes(needle);
+  });
+}

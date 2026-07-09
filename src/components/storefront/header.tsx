@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { List, MagnifyingGlass, ShoppingBag, User, X } from "@phosphor-icons/react";
+import {
+  Heart,
+  List,
+  MagnifyingGlass,
+  ShoppingBag,
+  User,
+  X,
+} from "@phosphor-icons/react";
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { useCartStore, cartCount } from "@/lib/cart/store";
+import { useWishlistStore } from "@/lib/wishlist/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import type { Category } from "@/types/database.types";
 import { cn } from "@/lib/utils";
@@ -14,8 +22,10 @@ export function Header({ categories }: { categories: Category[] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const hydrated = useHydrated();
   const { items, openCart } = useCartStore();
+  const wishlistCount = useWishlistStore((s) => s.productIds.length);
 
   const count = hydrated ? cartCount(items) : 0;
+  const favCount = hydrated ? wishlistCount : 0;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
@@ -64,8 +74,18 @@ export function Header({ categories }: { categories: Category[] }) {
 
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" className="hidden sm:inline-flex" asChild>
-            <Link href="/magaza" aria-label="Ara">
+            <Link href="/arama" aria-label="Ara">
               <MagnifyingGlass className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="relative" asChild>
+            <Link href="/favorilerim" aria-label="Favorilerim">
+              <Heart className="h-5 w-5" />
+              {favCount > 0 ? (
+                <span className="absolute -top-0.5 -right-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+                  {favCount}
+                </span>
+              ) : null}
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
