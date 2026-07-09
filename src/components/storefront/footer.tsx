@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/shared/logo";
 import { InstagramLogo } from "@phosphor-icons/react/dist/ssr";
+import { INSTAGRAM_URL } from "@/lib/seo";
 
 export function Footer() {
   return (
@@ -14,8 +15,9 @@ export function Footer() {
               oyuncaklar ve uyku arkadaşları.
             </p>
             <Link
-              href="https://instagram.com"
+              href={INSTAGRAM_URL}
               target="_blank"
+              rel="noopener noreferrer"
               className="mt-4 inline-flex text-muted-foreground hover:text-primary"
               aria-label="Instagram"
             >

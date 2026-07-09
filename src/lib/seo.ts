@@ -4,6 +4,7 @@ import { productImageUrl } from "@/lib/supabase/storage";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const SITE_NAME = "Elena By Elvin";
+export const INSTAGRAM_URL = "https://www.instagram.com/elenababywear";
 
 export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -25,6 +26,7 @@ export function organizationJsonLd() {
       addressRegion: "Bursa",
       addressCountry: "TR",
     },
+    sameAs: [INSTAGRAM_URL],
   };
 }
 

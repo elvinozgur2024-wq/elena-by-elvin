@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
-import { EnvelopeSimple, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import {
+  EnvelopeSimple,
+  InstagramLogo,
+  MapPin,
+  Phone,
+} from "@phosphor-icons/react/dist/ssr";
 import { ContactForm } from "@/components/storefront/contact-form";
+import { INSTAGRAM_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "İletişim",
@@ -35,6 +42,17 @@ export default function ContactPage() {
           <div className="flex items-start gap-3 text-sm">
             <Phone className="mt-0.5 h-5 w-5 text-primary" />
             <span className="text-muted-foreground">+90 (5XX) XXX XX XX</span>
+          </div>
+          <div className="flex items-start gap-3 text-sm">
+            <InstagramLogo className="mt-0.5 h-5 w-5 text-primary" />
+            <Link
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary"
+            >
+              @elenababywear
+            </Link>
           </div>
         </div>
         <ContactForm />
