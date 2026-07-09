@@ -3,8 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
-export function SearchBox({ initialQuery }: { initialQuery: string }) {
+export function SearchBox({
+  initialQuery,
+  autoFocus = true,
+  size = "default",
+  className,
+}: {
+  initialQuery: string;
+  autoFocus?: boolean;
+  size?: "default" | "compact";
+  className?: string;
+}) {
   const router = useRouter();
   const [value, setValue] = useState(initialQuery);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -27,29 +38,42 @@ export function SearchBox({ initialQuery }: { initialQuery: string }) {
     }, 300);
   }
 
+  const compact = size === "compact";
+
   return (
     <form
       role="search"
       onSubmit={(e) => e.preventDefault()}
-      className="relative"
+      className={cn("relative", className)}
     >
-      <MagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+      <MagnifyingGlass
+        className={cn(
+          "pointer-events-none absolute top-1/2 -translate-y-1/2 text-muted-foreground",
+          compact ? "left-3.5 h-4 w-4" : "left-4 h-5 w-5",
+        )}
+      />
       <input
         type="search"
         value={value}
         onChange={(e) => updateQuery(e.target.value)}
         placeholder="Ürün ara..."
-        autoFocus
-        className="w-full rounded-full border border-border bg-card py-3.5 pl-12 pr-11 text-base text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+        autoFocus={autoFocus}
+        className={cn(
+          "w-full rounded-full border border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none",
+          compact ? "py-2 pl-9.5 pr-8 text-sm" : "py-3.5 pl-12 pr-11 text-base",
+        )}
       />
       {value ? (
         <button
           type="button"
           onClick={() => updateQuery("")}
           aria-label="Aramayı temizle"
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          className={cn(
+            "absolute top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground",
+            compact ? "right-3" : "right-4",
+          )}
         >
-          <X className="h-4.5 w-4.5" />
+          <X className={compact ? "h-3.5 w-3.5" : "h-4.5 w-4.5"} />
         </button>
       ) : null}
     </form>
