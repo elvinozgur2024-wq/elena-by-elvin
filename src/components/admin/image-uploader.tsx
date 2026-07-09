@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
 import { Star, Trash, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 import {
   deleteProductImage,
@@ -24,31 +25,39 @@ export function ImageUploader({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
   const [dragOver, setDragOver] = useState(false);
+  const [removeBg, setRemoveBg] = useState(true);
 
   const [status, setStatus] = useState<string | null>(null);
 
   function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
+    const shouldRemoveBg = removeBg;
     startTransition(async () => {
       // Load the ML background remover lazily (it pulls a ~40MB WASM model on
-      // first use) so it never weighs down the rest of the admin panel.
-      const { removeBackground } = await import("@imgly/background-removal");
+      // first use) so it never weighs down the rest of the admin panel, and
+      // only when the option is actually enabled for this batch.
+      const removeBackground = shouldRemoveBg
+        ? (await import("@imgly/background-removal")).removeBackground
+        : null;
 
       for (const file of Array.from(files)) {
         try {
-          setStatus(`"${file.name}" arka planı kaldırılıyor...`);
-          const cutout = await removeBackground(file, {
-            output: { format: "image/png" },
-          });
+          let uploadFile = file;
+          if (removeBackground) {
+            setStatus(`"${file.name}" arka planı kaldırılıyor...`);
+            const cutout = await removeBackground(file, {
+              output: { format: "image/png" },
+            });
+            uploadFile = new File(
+              [cutout],
+              file.name.replace(/\.[^.]+$/, ".png"),
+              { type: "image/png" },
+            );
+          }
 
           setStatus(`"${file.name}" yükleniyor...`);
-          const cutoutFile = new File(
-            [cutout],
-            file.name.replace(/\.[^.]+$/, ".png"),
-            { type: "image/png" },
-          );
           const formData = new FormData();
-          formData.set("file", cutoutFile);
+          formData.set("file", uploadFile);
           await uploadProductImage(productId, formData);
         } catch {
           toast.error(`"${file.name}" yüklenemedi`);
@@ -60,6 +69,21 @@ export function ImageUploader({
 
   return (
     <div>
+      <label className="mb-3 flex cursor-pointer items-start gap-2.5 text-sm text-muted-foreground">
+        <Checkbox
+          className="mt-0.5"
+          checked={removeBg}
+          onCheckedChange={(checked) => setRemoveBg(checked === true)}
+        />
+        <span>
+          Arka planı otomatik kaldır
+          <span className="block text-xs text-muted-foreground/80">
+            İşaretliyse yüklenen görsel kesilip arka planı şeffaf hale
+            getirilir. İşaretli değilse görsel olduğu gibi yüklenir.
+          </span>
+        </span>
+      </label>
+
       <div
         onDragOver={(e) => {
           e.preventDefault();
