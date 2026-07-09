@@ -41,9 +41,10 @@ export function ImageUploader({
         : null;
 
       for (const file of Array.from(files)) {
-        try {
-          let uploadFile = file;
-          if (removeBackground) {
+        let uploadFile = file;
+
+        if (removeBackground) {
+          try {
             setStatus(`"${file.name}" arka planı kaldırılıyor...`);
             const cutout = await removeBackground(file, {
               output: { format: "image/png" },
@@ -53,13 +54,24 @@ export function ImageUploader({
               file.name.replace(/\.[^.]+$/, ".png"),
               { type: "image/png" },
             );
+          } catch (bgError) {
+            // Some photos trip up the ML model (very large files, unusual
+            // compression, etc.) — fall back to the original rather than
+            // blocking the upload entirely.
+            console.error("Background removal failed for", file.name, bgError);
+            toast.warning(
+              `"${file.name}" için arka plan kaldırılamadı, orijinal görsel yüklendi.`,
+            );
           }
+        }
 
+        try {
           setStatus(`"${file.name}" yükleniyor...`);
           const formData = new FormData();
           formData.set("file", uploadFile);
           await uploadProductImage(productId, formData);
-        } catch {
+        } catch (uploadError) {
+          console.error("Upload failed for", file.name, uploadError);
           toast.error(`"${file.name}" yüklenemedi`);
         }
       }
