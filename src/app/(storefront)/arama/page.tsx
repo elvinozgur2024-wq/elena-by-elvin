@@ -23,7 +23,7 @@ export default async function SearchPage({
         Ürün Ara
       </h1>
 
-      <div className="mx-auto mt-6 max-w-xl">
+      <div className="mx-auto mt-6 max-w-xl lg:hidden">
         <SearchBox initialQuery={query} />
       </div>
 
