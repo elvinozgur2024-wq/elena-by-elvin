@@ -36,7 +36,7 @@ export default function ContactPage() {
           <div className="flex items-start gap-3 text-sm">
             <EnvelopeSimple className="mt-0.5 h-5 w-5 text-primary" />
             <span className="text-muted-foreground">
-              merhaba@elenababywear.com
+              info@elenababywear.com.tr
             </span>
           </div>
           <div className="flex items-start gap-3 text-sm">
