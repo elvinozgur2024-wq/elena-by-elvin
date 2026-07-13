@@ -45,7 +45,11 @@ export function WishlistButton({
       )}
     >
       <Heart
-        className={size === "sm" ? "h-4.5 w-4.5" : "h-5 w-5"}
+        key={active ? "active" : "inactive"}
+        className={cn(
+          "animate-in zoom-in-50 duration-300 ease-out",
+          size === "sm" ? "h-4.5 w-4.5" : "h-5 w-5",
+        )}
         weight={active ? "fill" : "regular"}
       />
     </button>
