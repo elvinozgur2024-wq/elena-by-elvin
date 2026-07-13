@@ -22,7 +22,7 @@ export const categorySchema = z.object({
   name: z.string().min(2, "Kategori adı giriniz"),
   slug: z.string().min(2).regex(/^[a-z0-9-]+$/, "Slug yalnızca küçük harf, rakam ve tire içerebilir"),
   description: z.string().optional(),
-  tint: z.enum(["blush", "sage", "butter", "sky", "lavender"]),
+  tint: z.enum(["blush", "sage", "butter", "sky", "lavender", "mint"]),
   sort_order: z.coerce.number().int().default(0),
 });
 

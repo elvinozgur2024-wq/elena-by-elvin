@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/dialog";
 import { CategoryForm } from "@/components/admin/category-form";
 import { deleteCategory, updateCategory } from "@/actions/admin-categories";
-import type { Category } from "@/types/database.types";
+import type { Category, CategoryTint } from "@/types/database.types";
 
-const TINT_CLASS: Record<string, string> = {
+const TINT_CLASS: Record<CategoryTint, string> = {
   blush: "bg-tint-blush",
   sage: "bg-tint-sage",
   butter: "bg-tint-butter",
   sky: "bg-tint-sky",
   lavender: "bg-tint-lavender",
+  mint: "bg-tint-mint",
 };
 
 export function CategoryList({ categories }: { categories: Category[] }) {

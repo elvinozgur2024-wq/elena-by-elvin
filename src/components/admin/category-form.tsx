@@ -23,6 +23,7 @@ const TINTS: { value: CategoryTint; label: string }[] = [
   { value: "butter", label: "Tereyağı Sarısı" },
   { value: "sky", label: "Gök Mavisi" },
   { value: "lavender", label: "Lavanta" },
+  { value: "mint", label: "Nane Yeşili" },
 ];
 
 export function CategoryForm({
