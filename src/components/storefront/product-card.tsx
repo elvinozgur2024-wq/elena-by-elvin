@@ -3,12 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus } from "@phosphor-icons/react";
 import { formatPrice } from "@/lib/format";
 import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 import { useCartStore } from "@/lib/cart/store";
 import { WishlistButton } from "@/components/storefront/wishlist-button";
-import type { ProductWithImages } from "@/types/database.types";
+import type { CategoryTint, ProductWithImages } from "@/types/database.types";
+import { cn } from "@/lib/utils";
+
+const TINT_VAR: Record<CategoryTint, string> = {
+  blush: "var(--tint-blush)",
+  sage: "var(--tint-sage)",
+  butter: "var(--tint-butter)",
+  sky: "var(--tint-sky)",
+  lavender: "var(--tint-lavender)",
+  mint: "var(--tint-mint)",
+};
 
 export function ProductCard({ product }: { product: ProductWithImages }) {
   const router = useRouter();
@@ -20,10 +29,18 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
   const hasVariants = product.product_variants.length > 0;
   const onSale = product.compare_at_price != null;
   const soldOut = !hasVariants && product.stock_quantity <= 0;
+  const discountPercent = onSale
+    ? Math.round(
+        (1 - product.base_price / product.compare_at_price!) * 100,
+      )
+    : null;
 
-  function handleQuickAdd(e: React.MouseEvent) {
+  const tint = product.category ? TINT_VAR[product.category.tint] : TINT_VAR.butter;
+
+  function handleAction(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+    if (soldOut) return;
     // Products with options can't be resolved from the grid — send the
     // shopper to the product page to choose. Simple products add straight
     // to the bag (addItem opens the cart drawer on its own).
@@ -46,22 +63,40 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
   return (
     <Link
       href={`/urun/${product.slug}`}
-      className="group flex flex-col rounded-3xl bg-card p-3 shadow-none transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_24px_48px_-20px_rgba(74,63,58,0.45)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      className="group flex flex-col rounded-3xl bg-card shadow-none transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_24px_48px_-20px_rgba(74,63,58,0.45)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
-      <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white">
+      <div
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl"
+        style={{
+          background: `radial-gradient(130% 110% at 50% 18%, color-mix(in srgb, white 32%, ${tint}) 0%, ${tint} 55%, color-mix(in srgb, black 7%, ${tint}) 100%)`,
+        }}
+      >
+        {/* Grounding shadow — reads as a studio floor shadow under the product */}
+        <div className="absolute bottom-[10%] left-1/2 h-[9%] w-[52%] -translate-x-1/2 rounded-full bg-black/15 blur-md" />
+
         {primaryImage ? (
           <Image
             src={productImageUrl(primaryImage.storage_path, PRODUCT_IMAGE_VERSION)}
             alt={primaryImage.alt_text ?? product.name}
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-contain p-6 transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+            className="relative object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
           />
         ) : null}
 
-        {onSale ? (
+        {soldOut ? (
+          <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-2.5 py-1 text-[11px] font-medium tracking-wide text-background">
+            Stokta Yok
+          </span>
+        ) : product.is_featured ? (
           <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium tracking-wide text-primary-foreground">
-            İndirim
+            Çok Satılan
+          </span>
+        ) : null}
+
+        {discountPercent ? (
+          <span className="absolute bottom-3 left-3 rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium tracking-wide text-primary-foreground">
+            -%{discountPercent}
           </span>
         ) : null}
 
@@ -70,24 +105,9 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
           revealOnHover
           className="absolute right-3 top-3"
         />
-
-        {soldOut ? (
-          <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-2.5 py-1 text-[11px] font-medium tracking-wide text-background">
-            Stokta Yok
-          </span>
-        ) : (
-          <button
-            type="button"
-            onClick={handleQuickAdd}
-            aria-label={hasVariants ? "Seçenekleri gör" : "Sepete ekle"}
-            className="absolute bottom-3 right-3 flex h-10 w-10 translate-y-2 items-center justify-center rounded-full bg-primary text-primary-foreground opacity-0 shadow-sm transition duration-300 ease-out hover:scale-105 focus-visible:translate-y-0 focus-visible:opacity-100 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
-          >
-            <Plus className="h-4 w-4" weight="bold" />
-          </button>
-        )}
       </div>
 
-      <div className="mt-4 flex flex-1 flex-col gap-1 px-1 pb-1">
+      <div className="flex flex-1 flex-col gap-1 px-1 pb-1 pt-4">
         {product.category ? (
           <span className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
             {product.category.name}
@@ -106,6 +126,20 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
             </span>
           ) : null}
         </div>
+
+        <button
+          type="button"
+          onClick={handleAction}
+          disabled={soldOut}
+          className={cn(
+            "mt-3 w-full rounded-full border py-2.5 text-sm font-medium tracking-wide transition-colors duration-200",
+            soldOut
+              ? "cursor-not-allowed border-border text-muted-foreground"
+              : "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
+          )}
+        >
+          {soldOut ? "Stokta Yok" : hasVariants ? "Seçenekleri Gör" : "Sepete Ekle"}
+        </button>
       </div>
     </Link>
   );

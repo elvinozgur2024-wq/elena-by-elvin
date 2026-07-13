@@ -71,7 +71,7 @@ interface SeedCategory {
   name: string;
   slug: string;
   description: string;
-  tint: "blush" | "sage" | "butter" | "sky" | "lavender";
+  tint: "blush" | "sage" | "butter" | "sky" | "lavender" | "mint";
   sort_order: number;
 }
 
@@ -115,7 +115,7 @@ const CATEGORIES: SeedCategory[] = [
     name: "Anahtarlıklar",
     slug: "anahtarliklar",
     description: "Çantanıza sevimlilik katan minik peluş anahtarlıklar.",
-    tint: "sky" as const,
+    tint: "mint" as const,
     sort_order: 6,
   },
 ];

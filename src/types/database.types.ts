@@ -11,7 +11,7 @@ export type OrderStatus =
   | "cancelled"
   | "failed";
 
-export type CategoryTint = "blush" | "sage" | "butter" | "sky" | "lavender";
+export type CategoryTint = "blush" | "sage" | "butter" | "sky" | "lavender" | "mint";
 
 export type CustomerRole = "customer" | "admin";
 

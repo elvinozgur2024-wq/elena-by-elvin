@@ -44,6 +44,7 @@
   --color-tint-butter: var(--tint-butter);
   --color-tint-sky: var(--tint-sky);
   --color-tint-lavender: var(--tint-lavender);
+  --color-tint-mint: var(--tint-mint);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -86,6 +87,7 @@
   --tint-butter: #f5e6c8;
   --tint-sky: #d8e6ec;
   --tint-lavender: #e9dff0;
+  --tint-mint: #d9e8dc;
 
   --sidebar: #fffaf7;
   --sidebar-foreground: #4a3f3a;
