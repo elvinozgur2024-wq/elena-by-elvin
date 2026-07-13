@@ -7,7 +7,7 @@ export function Logo({ className }: { className?: string }) {
       src="/brand/elenaland-logo.png"
       alt="Elena By Elvin"
       width={2431}
-      height={773}
+      height={928}
       priority
       className={cn("h-12 w-auto", className)}
     />
