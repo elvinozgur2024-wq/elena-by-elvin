@@ -7,6 +7,29 @@ import { createClient } from "@/lib/supabase/server";
 import { productSchema } from "@/lib/validations/product";
 import type { ActionResult } from "@/actions/auth";
 
+// The public storefront pages (homepage, /magaza, category pages, product
+// pages) are statically generated with a 1-hour ISR revalidate window, so
+// without this, admin edits would sit cached and invisible to shoppers for
+// up to an hour. Looks up the product's slug/category fresh so callers that
+// only have a productId (image/variant actions) can still revalidate the
+// exact pages that show it.
+async function revalidateStorefrontForProduct(
+  supabase: Awaited<ReturnType<typeof requireAdmin>>,
+  productId: string,
+) {
+  const { data } = await supabase
+    .from("products")
+    .select("slug, category:categories(slug)")
+    .eq("id", productId)
+    .maybeSingle();
+  const category = data?.category as unknown as { slug: string } | null;
+
+  revalidatePath("/");
+  revalidatePath("/magaza");
+  if (data?.slug) revalidatePath(`/urun/${data.slug}`);
+  if (category?.slug) revalidatePath(`/magaza/${category.slug}`);
+}
+
 async function requireAdmin() {
   const supabase = await createClient();
   const {
@@ -66,6 +89,7 @@ export async function createProduct(
   }
 
   revalidatePath("/admin/urunler");
+  await revalidateStorefrontForProduct(supabase, data.id);
   redirect(`/admin/urunler/${data.id}`);
 }
 
@@ -94,13 +118,30 @@ export async function updateProduct(
 
   revalidatePath("/admin/urunler");
   revalidatePath(`/admin/urunler/${productId}`);
+  await revalidateStorefrontForProduct(supabase, productId);
   return {};
 }
 
 export async function deleteProduct(productId: string) {
   const supabase = await requireAdmin();
+  // Capture the pages this product appears on before deleting it — the
+  // lookup inside revalidateStorefrontForProduct would come back empty
+  // once the row is gone.
+  const { data: existing } = await supabase
+    .from("products")
+    .select("slug, category:categories(slug)")
+    .eq("id", productId)
+    .maybeSingle();
+
+  const existingCategory = existing?.category as unknown as { slug: string } | null;
+
   await supabase.from("products").delete().eq("id", productId);
+
   revalidatePath("/admin/urunler");
+  revalidatePath("/");
+  revalidatePath("/magaza");
+  if (existing?.slug) revalidatePath(`/urun/${existing.slug}`);
+  if (existingCategory?.slug) revalidatePath(`/magaza/${existingCategory.slug}`);
 }
 
 export async function uploadProductImage(productId: string, formData: FormData) {
@@ -151,6 +192,7 @@ export async function uploadProductImage(productId: string, formData: FormData) 
   }
 
   revalidatePath(`/admin/urunler/${productId}`);
+  await revalidateStorefrontForProduct(supabase, productId);
 }
 
 export async function deleteProductImage(imageId: string, productId: string) {
@@ -167,6 +209,7 @@ export async function deleteProductImage(imageId: string, productId: string) {
 
   await supabase.from("product_images").delete().eq("id", imageId);
   revalidatePath(`/admin/urunler/${productId}`);
+  await revalidateStorefrontForProduct(supabase, productId);
 }
 
 export async function setPrimaryImage(imageId: string, productId: string) {
@@ -180,6 +223,7 @@ export async function setPrimaryImage(imageId: string, productId: string) {
     .update({ is_primary: true })
     .eq("id", imageId);
   revalidatePath(`/admin/urunler/${productId}`);
+  await revalidateStorefrontForProduct(supabase, productId);
 }
 
 export async function addVariant(productId: string, formData: FormData) {
@@ -192,10 +236,12 @@ export async function addVariant(productId: string, formData: FormData) {
     stock_quantity: Number(formData.get("stock_quantity") ?? 0),
   });
   revalidatePath(`/admin/urunler/${productId}`);
+  await revalidateStorefrontForProduct(supabase, productId);
 }
 
 export async function deleteVariant(variantId: string, productId: string) {
   const supabase = await requireAdmin();
   await supabase.from("product_variants").delete().eq("id", variantId);
   revalidatePath(`/admin/urunler/${productId}`);
+  await revalidateStorefrontForProduct(supabase, productId);
 }
