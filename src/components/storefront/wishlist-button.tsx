@@ -18,9 +18,9 @@ export function WishlistButton({
   revealOnHover?: boolean;
 }) {
   const hydrated = useHydrated();
-  const has = useWishlistStore((s) => s.has);
+  const productIds = useWishlistStore((s) => s.productIds);
   const toggle = useWishlistStore((s) => s.toggle);
-  const active = hydrated && has(productId);
+  const active = hydrated && productIds.includes(productId);
 
   return (
     <button
