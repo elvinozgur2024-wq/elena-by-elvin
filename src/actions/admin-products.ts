@@ -136,12 +136,19 @@ export async function uploadProductImage(productId: string, formData: FormData) 
     .select("*", { count: "exact", head: true })
     .eq("product_id", productId);
 
-  await supabase.from("product_images").insert({
+  const { error: insertError } = await supabase.from("product_images").insert({
     product_id: productId,
     storage_path: path,
     is_primary: (count ?? 0) === 0,
     sort_order: count ?? 0,
   });
+
+  if (insertError) {
+    // Roll back the storage upload so we don't leave an orphaned file with
+    // no database record pointing to it.
+    await supabase.storage.from("product-images").remove([path]);
+    throw new Error("Görsel veritabanına kaydedilemedi");
+  }
 
   revalidatePath(`/admin/urunler/${productId}`);
 }

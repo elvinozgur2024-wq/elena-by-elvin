@@ -7,17 +7,8 @@ import { formatPrice } from "@/lib/format";
 import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 import { useCartStore } from "@/lib/cart/store";
 import { WishlistButton } from "@/components/storefront/wishlist-button";
-import type { CategoryTint, ProductWithImages } from "@/types/database.types";
+import type { ProductWithImages } from "@/types/database.types";
 import { cn } from "@/lib/utils";
-
-const TINT_VAR: Record<CategoryTint, string> = {
-  blush: "var(--tint-blush)",
-  sage: "var(--tint-sage)",
-  butter: "var(--tint-butter)",
-  sky: "var(--tint-sky)",
-  lavender: "var(--tint-lavender)",
-  mint: "var(--tint-mint)",
-};
 
 export function ProductCard({ product }: { product: ProductWithImages }) {
   const router = useRouter();
@@ -34,8 +25,6 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
         (1 - product.base_price / product.compare_at_price!) * 100,
       )
     : null;
-
-  const tint = product.category ? TINT_VAR[product.category.tint] : TINT_VAR.butter;
 
   function handleAction(e: React.MouseEvent) {
     e.preventDefault();
@@ -65,22 +54,14 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
       href={`/urun/${product.slug}`}
       className="group flex flex-col rounded-3xl bg-card shadow-none transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_24px_48px_-20px_rgba(74,63,58,0.45)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
-      <div
-        className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl"
-        style={{
-          background: `radial-gradient(130% 110% at 50% 18%, color-mix(in srgb, white 32%, ${tint}) 0%, ${tint} 55%, color-mix(in srgb, black 7%, ${tint}) 100%)`,
-        }}
-      >
-        {/* Grounding shadow — reads as a studio floor shadow under the product */}
-        <div className="absolute bottom-[10%] left-1/2 h-[9%] w-[52%] -translate-x-1/2 rounded-full bg-black/15 blur-md" />
-
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-secondary">
         {primaryImage ? (
           <Image
             src={productImageUrl(primaryImage.storage_path, PRODUCT_IMAGE_VERSION)}
             alt={primaryImage.alt_text ?? product.name}
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="relative object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
           />
         ) : null}
 
