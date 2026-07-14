@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Logo } from "@/components/shared/logo";
+import { WaveDivider } from "@/components/storefront/wave-divider";
 import { InstagramLogo } from "@phosphor-icons/react/dist/ssr";
 import { INSTAGRAM_URL } from "@/lib/seo";
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-border bg-secondary/60">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="mt-20">
+      <WaveDivider position="top" className="text-wash-sand" />
+      <div className="bg-wash-sand">
+      <div className="mx-auto max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
             <Logo />
@@ -101,6 +104,7 @@ export function Footer() {
             © {new Date().getFullYear()} Elena By Elvin. Tüm hakları saklıdır.
           </p>
         </div>
+      </div>
       </div>
     </footer>
   );

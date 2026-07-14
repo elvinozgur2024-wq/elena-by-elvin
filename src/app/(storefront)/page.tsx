@@ -4,6 +4,7 @@ import { Gift, Heart, Sparkle, Truck } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Reveal } from "@/components/storefront/reveal";
+import { WaveDivider } from "@/components/storefront/wave-divider";
 import { getCategories, getProducts } from "@/lib/data/products";
 import { getSiteContent } from "@/lib/data/site-content";
 import { productImageUrl } from "@/lib/supabase/storage";
@@ -84,66 +85,72 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Category grid */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="flex items-end justify-between">
-            <h2 className="font-serif text-2xl text-foreground sm:text-3xl">
-              Kategoriler
-            </h2>
-            <Link
-              href="/magaza"
-              className="text-sm text-primary hover:underline"
-            >
-              Tümünü Gör
-            </Link>
-          </div>
-          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {categories.map((category) =>
-              category.image_path ? (
+      {/* Category grid — full-width blush band with wavy edges */}
+      <section className="mt-12 lg:mt-16">
+        <WaveDivider position="top" className="text-wash-blush" />
+        <div className="bg-wash-blush">
+          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+            <Reveal>
+              <div className="flex items-end justify-between">
+                <h2 className="font-serif text-2xl text-foreground sm:text-3xl">
+                  Kategoriler
+                </h2>
                 <Link
-                  key={category.id}
-                  href={`/magaza/${category.slug}`}
-                  className={cn(
-                    "group relative aspect-square overflow-hidden rounded-3xl transition-transform hover:scale-[1.02]",
-                    TINT_CLASS[category.tint],
-                  )}
+                  href="/magaza"
+                  className="text-sm text-primary hover:underline"
                 >
-                  <Image
-                    src={productImageUrl(category.image_path)}
-                    alt={category.name}
-                    fill
-                    sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05] motion-reduce:transform-none"
-                  />
-                  <span className="absolute inset-x-0 bottom-3 flex justify-center">
-                    <span className="rounded-full bg-white/85 px-3.5 py-1.5 font-serif text-sm text-mocha shadow-sm backdrop-blur-sm sm:text-base">
-                      {category.name}
-                    </span>
-                  </span>
+                  Tümünü Gör
                 </Link>
-              ) : (
-                <Link
-                  key={category.id}
-                  href={`/magaza/${category.slug}`}
-                  className={cn(
-                    "group flex aspect-square flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center transition-transform hover:scale-[1.02]",
-                    TINT_CLASS[category.tint],
-                  )}
-                >
-                  <Sparkle className="h-6 w-6 text-mocha/70" />
-                  <span className="font-serif text-sm text-mocha sm:text-base">
-                    {category.name}
-                  </span>
-                </Link>
-              ),
-            )}
+              </div>
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+                {categories.map((category) =>
+                  category.image_path ? (
+                    <Link
+                      key={category.id}
+                      href={`/magaza/${category.slug}`}
+                      className={cn(
+                        "group relative aspect-square overflow-hidden rounded-3xl transition-transform hover:scale-[1.02]",
+                        TINT_CLASS[category.tint],
+                      )}
+                    >
+                      <Image
+                        src={productImageUrl(category.image_path)}
+                        alt={category.name}
+                        fill
+                        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05] motion-reduce:transform-none"
+                      />
+                      <span className="absolute inset-x-0 bottom-3 flex justify-center">
+                        <span className="rounded-full bg-white/85 px-3.5 py-1.5 font-serif text-sm text-mocha shadow-sm backdrop-blur-sm sm:text-base">
+                          {category.name}
+                        </span>
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      key={category.id}
+                      href={`/magaza/${category.slug}`}
+                      className={cn(
+                        "group flex aspect-square flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center transition-transform hover:scale-[1.02]",
+                        TINT_CLASS[category.tint],
+                      )}
+                    >
+                      <Sparkle className="h-6 w-6 text-mocha/70" />
+                      <span className="font-serif text-sm text-mocha sm:text-base">
+                        {category.name}
+                      </span>
+                    </Link>
+                  ),
+                )}
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
+        </div>
+        <WaveDivider position="bottom" className="text-wash-blush" />
       </section>
 
       {/* Featured products */}
-      <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-4 pt-8 sm:px-6 lg:px-8 lg:pt-10">
         <Reveal>
           <div className="flex items-end justify-between">
             <h2 className="font-serif text-2xl text-foreground sm:text-3xl">
@@ -161,32 +168,39 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      {/* New arrivals — automatic: newest products not already shown above */}
+      {/* New arrivals — automatic: newest products not already shown above,
+          on a full-width sky band with wavy edges */}
       {newArrivals.length > 0 ? (
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <Reveal>
-            <div className="flex items-end justify-between">
-              <h2 className="font-serif text-2xl text-foreground sm:text-3xl">
-                Yeni Gelenler
-              </h2>
-              <Link
-                href="/magaza"
-                className="text-sm text-primary hover:underline"
-              >
-                Tümünü Gör
-              </Link>
+        <section className="mt-10 lg:mt-14">
+          <WaveDivider position="top" className="text-wash-sky" />
+          <div className="bg-wash-sky">
+            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+              <Reveal>
+                <div className="flex items-end justify-between">
+                  <h2 className="font-serif text-2xl text-foreground sm:text-3xl">
+                    Yeni Gelenler
+                  </h2>
+                  <Link
+                    href="/magaza"
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Tümünü Gör
+                  </Link>
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                  {newArrivals.map((product) => (
+                    <ProductCard key={product.id} product={product} newBadge />
+                  ))}
+                </div>
+              </Reveal>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-              {newArrivals.map((product) => (
-                <ProductCard key={product.id} product={product} newBadge />
-              ))}
-            </div>
-          </Reveal>
+          </div>
+          <WaveDivider position="bottom" className="text-wash-sky" />
         </section>
       ) : null}
 
       {/* Gift strip */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pt-12">
         <Reveal>
           <div className="grid grid-cols-1 items-center gap-10 overflow-hidden rounded-[2.5rem] bg-tint-butter lg:grid-cols-2">
             <div className="relative aspect-[4/3] w-full lg:aspect-auto lg:h-full lg:min-h-[360px]">

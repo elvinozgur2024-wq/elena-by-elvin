@@ -45,6 +45,9 @@
   --color-tint-sky: var(--tint-sky);
   --color-tint-lavender: var(--tint-lavender);
   --color-tint-mint: var(--tint-mint);
+  --color-wash-blush: var(--wash-blush);
+  --color-wash-sky: var(--wash-sky);
+  --color-wash-sand: var(--wash-sand);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -88,6 +91,13 @@
   --tint-sky: #d8e6ec;
   --tint-lavender: #e9dff0;
   --tint-mint: #d9e8dc;
+
+  /* Washes — the tints diluted toward white, used as full-width section
+     bands behind wavy dividers. Faint on purpose: the waves only need a
+     whisper of color difference to read. */
+  --wash-blush: #faeeeb;
+  --wash-sky: #f1f6f8;
+  --wash-sand: #f9f5f1;
 
   --sidebar: #fffaf7;
   --sidebar-foreground: #4a3f3a;
