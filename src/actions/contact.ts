@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { sendContactNotificationEmail } from "@/lib/email/contact-notification";
 import { contactSchema } from "@/lib/validations/product";
 import type { ActionResult } from "@/actions/auth";
 
@@ -26,6 +27,10 @@ export async function submitContactMessage(
   if (error) {
     return { error: "Mesajınız gönderilemedi, lütfen tekrar deneyin" };
   }
+
+  // Messages were only landing in the contact_messages table, which nothing
+  // surfaces — forward each one to the shop's inbox. Best-effort by design.
+  await sendContactNotificationEmail(parsed.data);
 
   return { success: true };
 }
