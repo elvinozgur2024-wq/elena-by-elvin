@@ -24,13 +24,19 @@ const TINT_CLASS: Record<string, string> = {
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const [categories, featured, content] = await Promise.all([
+  // One catalog query (newest first) feeds both rows: the curated
+  // "Öne Çıkanlar" grid and the automatic "Yeni Gelenler" row.
+  const [categories, allProducts, content] = await Promise.all([
     getCategories(),
-    getProducts({ featuredOnly: true }),
+    getProducts(),
     getSiteContent(),
   ]);
 
-  const products = featured.length > 0 ? featured : await getProducts();
+  const featured = allProducts.filter((p) => p.is_featured);
+  const products = featured.length > 0 ? featured : allProducts;
+  const featuredRow = products.slice(0, 8);
+  const shownIds = new Set(featuredRow.map((p) => p.id));
+  const newArrivals = allProducts.filter((p) => !shownIds.has(p.id)).slice(0, 4);
 
   const heroImageSrc = content.hero_image_path
     ? `${productImageUrl(content.hero_image_path)}?v=${encodeURIComponent(content.updated_at)}`
@@ -148,12 +154,36 @@ export default async function HomePage() {
             </Link>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {products.slice(0, 8).map((product) => (
+            {featuredRow.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </Reveal>
       </section>
+
+      {/* New arrivals — automatic: newest products not already shown above */}
+      {newArrivals.length > 0 ? (
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="flex items-end justify-between">
+              <h2 className="font-serif text-2xl text-foreground sm:text-3xl">
+                Yeni Gelenler
+              </h2>
+              <Link
+                href="/magaza"
+                className="text-sm text-primary hover:underline"
+              >
+                Tümünü Gör
+              </Link>
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {newArrivals.map((product) => (
+                <ProductCard key={product.id} product={product} newBadge />
+              ))}
+            </div>
+          </Reveal>
+        </section>
+      ) : null}
 
       {/* Gift strip */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

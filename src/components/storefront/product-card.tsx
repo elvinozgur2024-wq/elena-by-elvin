@@ -10,7 +10,14 @@ import { WishlistButton } from "@/components/storefront/wishlist-button";
 import type { ProductWithImages } from "@/types/database.types";
 import { cn } from "@/lib/utils";
 
-export function ProductCard({ product }: { product: ProductWithImages }) {
+export function ProductCard({
+  product,
+  newBadge = false,
+}: {
+  product: ProductWithImages;
+  /** Show a "Yeni" badge instead of "Çok Satılan" — used on the new-arrivals row. */
+  newBadge?: boolean;
+}) {
   const router = useRouter();
   const addItem = useCartStore((s) => s.addItem);
 
@@ -68,6 +75,10 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
         {soldOut ? (
           <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-2.5 py-1 text-[11px] font-medium tracking-wide text-background">
             Stokta Yok
+          </span>
+        ) : newBadge ? (
+          <span className="absolute left-3 top-3 rounded-full bg-tint-sage px-2.5 py-1 text-[11px] font-medium tracking-wide text-mocha">
+            Yeni
           </span>
         ) : product.is_featured ? (
           <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium tracking-wide text-primary-foreground">
