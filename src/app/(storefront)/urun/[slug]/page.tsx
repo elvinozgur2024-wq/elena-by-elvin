@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import {
+  ArrowCounterClockwise,
+  ShieldCheck,
+  Truck,
+} from "@phosphor-icons/react/dist/ssr";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import { ProductGallery } from "@/components/storefront/product-gallery";
 import { AddToCartForm } from "@/components/storefront/add-to-cart-form";
 import { SizeGuideDialog } from "@/components/storefront/size-guide-dialog";
@@ -81,6 +93,10 @@ export default async function ProductPage({
           __html: JSON.stringify(breadcrumbJsonLd(breadcrumbItems)),
         }}
       />
+      <div className="mb-6">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
+
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
         <ProductGallery
           images={product.product_images}
@@ -123,29 +139,60 @@ export default async function ProductPage({
             ) : null}
           </div>
 
+          {/* Reassurance — claims mirror /kargo-ve-iade and the checkout flow */}
+          <div className="mt-6 grid grid-cols-1 gap-3 rounded-2xl bg-secondary/60 p-4 sm:grid-cols-3">
+            <div className="flex items-center gap-2.5 sm:flex-col sm:gap-1.5 sm:text-center">
+              <Truck className="h-5 w-5 shrink-0 text-primary" />
+              <p className="text-xs leading-snug text-muted-foreground">
+                750₺ üzeri ücretsiz kargo
+              </p>
+            </div>
+            <div className="flex items-center gap-2.5 sm:flex-col sm:gap-1.5 sm:text-center">
+              <ArrowCounterClockwise className="h-5 w-5 shrink-0 text-primary" />
+              <p className="text-xs leading-snug text-muted-foreground">
+                14 gün içinde kolay iade
+              </p>
+            </div>
+            <div className="flex items-center gap-2.5 sm:flex-col sm:gap-1.5 sm:text-center">
+              <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
+              <p className="text-xs leading-snug text-muted-foreground">
+                iyzico ile güvenli ödeme
+              </p>
+            </div>
+          </div>
+
           {(product.description || product.care_instructions) && (
-            <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6">
+            <Accordion
+              type="single"
+              collapsible
+              defaultValue={product.description ? "detay" : "bakim"}
+              className="mt-8 border-t border-border pt-2"
+            >
               {product.description ? (
-                <div>
-                  <h2 className="font-serif text-base text-foreground">
+                <AccordionItem value="detay">
+                  <AccordionTrigger className="font-serif text-base text-foreground hover:no-underline">
                     Ürün Detayı
-                  </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
-                    {product.description}
-                  </p>
-                </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+                      {product.description}
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
               ) : null}
               {product.care_instructions ? (
-                <div>
-                  <h2 className="font-serif text-base text-foreground">
+                <AccordionItem value="bakim">
+                  <AccordionTrigger className="font-serif text-base text-foreground hover:no-underline">
                     Bakım Önerileri
-                  </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
-                    {product.care_instructions}
-                  </p>
-                </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+                      {product.care_instructions}
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
               ) : null}
-            </div>
+            </Accordion>
           )}
         </div>
       </div>

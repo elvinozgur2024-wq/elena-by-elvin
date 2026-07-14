@@ -22,6 +22,7 @@ export interface Category {
   description: string | null;
   tint: CategoryTint;
   sort_order: number;
+  image_path: string | null;
   created_at: string;
 }
 

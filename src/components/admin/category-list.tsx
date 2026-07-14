@@ -9,17 +9,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CategoryForm } from "@/components/admin/category-form";
+import { CategoryImageUploader } from "@/components/admin/category-image-uploader";
 import { deleteCategory, updateCategory } from "@/actions/admin-categories";
-import type { Category, CategoryTint } from "@/types/database.types";
-
-const TINT_CLASS: Record<CategoryTint, string> = {
-  blush: "bg-tint-blush",
-  sage: "bg-tint-sage",
-  butter: "bg-tint-butter",
-  sky: "bg-tint-sky",
-  lavender: "bg-tint-lavender",
-  mint: "bg-tint-mint",
-};
+import type { Category } from "@/types/database.types";
 
 export function CategoryList({ categories }: { categories: Category[] }) {
   const [editing, setEditing] = useState<Category | null>(null);
@@ -33,9 +25,7 @@ export function CategoryList({ categories }: { categories: Category[] }) {
             className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3"
           >
             <div className="flex items-center gap-3">
-              <span
-                className={`h-6 w-6 rounded-full ${TINT_CLASS[category.tint]}`}
-              />
+              <CategoryImageUploader category={category} />
               <div>
                 <p className="text-sm font-medium text-foreground">
                   {category.name}

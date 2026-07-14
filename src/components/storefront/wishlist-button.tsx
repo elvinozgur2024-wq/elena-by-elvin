@@ -47,7 +47,8 @@ export function WishlistButton({
       <Heart
         key={active ? "active" : "inactive"}
         className={cn(
-          "animate-in zoom-in-50 duration-300 ease-out",
+          // Springy pop when hearted, quiet fade back when un-hearted.
+          active ? "animate-heart-pop" : "animate-in fade-in duration-200",
           size === "sm" ? "h-4.5 w-4.5" : "h-5 w-5",
         )}
         weight={active ? "fill" : "regular"}
