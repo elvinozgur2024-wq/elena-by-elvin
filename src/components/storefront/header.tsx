@@ -117,13 +117,17 @@ export function Header({ categories }: { categories: Category[] }) {
         ))}
       </nav>
 
+      {/* Open cap is viewport-relative, not a fixed pixel value — the nav
+          list grows with the category list, and a hardcoded max-height
+          (formerly max-h-96) silently clips new entries. The inner nav
+          scrolls if a short screen can't fit everything. */}
       <div
         className={cn(
           "lg:hidden overflow-hidden border-t border-border bg-background transition-[max-height] duration-200",
-          mobileOpen ? "max-h-96" : "max-h-0 border-t-0",
+          mobileOpen ? "max-h-[75dvh]" : "max-h-0 border-t-0",
         )}
       >
-        <nav className="flex flex-col gap-1 px-4 py-3">
+        <nav className="flex max-h-[75dvh] flex-col gap-1 overflow-y-auto overscroll-contain px-4 py-3">
           {navLinks.map((link) => (
             <Link
               key={link.href}
