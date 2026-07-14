@@ -13,7 +13,7 @@ export default function PrivacyPolicyPage() {
       </h1>
       <div className="mt-6 flex flex-col gap-5 text-sm leading-relaxed text-muted-foreground">
         <p>
-          Elena Babywear Tekstil San. ve Tic. Ltd. Şti. olarak, elenababywear.com
+          Elena Babywear Tekstil San. ve Tic. Ltd. Şti. olarak, elenababywear.com.tr
           üzerinden topladığımız kişisel verilerinizin gizliliğine önem
           veriyoruz. Bu politika, hangi verileri topladığımızı ve nasıl
           kullandığımızı açıklar.

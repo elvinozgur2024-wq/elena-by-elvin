@@ -28,7 +28,7 @@ export default function DistanceSalesAgreementPage() {
           <h2 className="font-serif text-lg text-foreground">2. Konu</h2>
           <p className="mt-2">
             İşbu sözleşmenin konusu, Alıcı&apos;nın Satıcı&apos;ya ait
-            elenababywear.com internet sitesinden elektronik ortamda
+            elenababywear.com.tr internet sitesinden elektronik ortamda
             siparişini verdiği ürünlerin satışı ve teslimi ile ilgili olarak
             6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli
             Sözleşmeler Yönetmeliği hükümleri gereğince tarafların hak ve
