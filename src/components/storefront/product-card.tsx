@@ -24,6 +24,9 @@ export function ProductCard({
   const primaryImage =
     product.product_images.find((img) => img.is_primary) ??
     product.product_images[0];
+  // Second photo shown on hover — first non-primary image in sort order.
+  const hoverImage =
+    product.product_images.find((img) => img.id !== primaryImage?.id) ?? null;
   const hasVariants = product.product_variants.length > 0;
   const onSale = product.compare_at_price != null;
   const soldOut = !hasVariants && product.stock_quantity <= 0;
@@ -69,6 +72,17 @@ export function ProductCard({
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+          />
+        ) : null}
+
+        {hoverImage ? (
+          <Image
+            src={productImageUrl(hoverImage.storage_path, PRODUCT_IMAGE_VERSION)}
+            alt=""
+            aria-hidden
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+            className="object-cover opacity-0 transition-[opacity,transform] duration-500 ease-out group-hover:scale-[1.04] group-hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
           />
         ) : null}
 
