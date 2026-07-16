@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AdminSidebar } from "@/components/admin/sidebar";
+import { getUnreadMessageCountAdmin } from "@/lib/data/admin";
 
 export default async function AdminDashboardLayout({
   children,
@@ -22,9 +23,11 @@ export default async function AdminDashboardLayout({
 
   if (customer?.role !== "admin") redirect("/admin/giris");
 
+  const unreadMessages = await getUnreadMessageCountAdmin();
+
   return (
     <div className="flex min-h-screen bg-secondary/30">
-      <AdminSidebar />
+      <AdminSidebar unreadMessages={unreadMessages} />
       <div className="flex-1 overflow-x-hidden">
         <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
       </div>

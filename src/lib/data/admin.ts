@@ -1,5 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import type { OrderWithItems, ProductWithImages } from "@/types/database.types";
+import type {
+  ContactMessage,
+  OrderWithItems,
+  ProductWithImages,
+} from "@/types/database.types";
 
 const PRODUCT_SELECT = `
   *,
@@ -77,4 +81,24 @@ export async function getDashboardStats() {
     orderCount: orderCount ?? 0,
     lowStockProducts: lowStock ?? [],
   };
+}
+
+export async function getContactMessagesAdmin(): Promise<ContactMessage[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contact_messages")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getUnreadMessageCountAdmin(): Promise<number> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("contact_messages")
+    .select("*", { count: "exact", head: true })
+    .eq("is_read", false);
+  return count ?? 0;
 }

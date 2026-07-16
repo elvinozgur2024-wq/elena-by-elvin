@@ -7,6 +7,7 @@ import {
   Package,
   Tag,
   ShoppingBag,
+  ChatCircleText,
   Image as ImageIcon,
   SignOut,
 } from "@phosphor-icons/react";
@@ -19,10 +20,15 @@ const NAV = [
   { href: "/admin/urunler", label: "Ürünler", icon: Package },
   { href: "/admin/kategoriler", label: "Kategoriler", icon: Tag },
   { href: "/admin/siparisler", label: "Siparişler", icon: ShoppingBag },
+  { href: "/admin/mesajlar", label: "Mesajlar", icon: ChatCircleText },
   { href: "/admin/site-icerigi", label: "Site İçeriği", icon: ImageIcon },
 ];
 
-export function AdminSidebar() {
+export function AdminSidebar({
+  unreadMessages = 0,
+}: {
+  unreadMessages?: number;
+}) {
   const pathname = usePathname();
 
   return (
@@ -50,6 +56,18 @@ export function AdminSidebar() {
             >
               <item.icon className="h-4.5 w-4.5" />
               {item.label}
+              {item.href === "/admin/mesajlar" && unreadMessages > 0 ? (
+                <span
+                  className={cn(
+                    "ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-medium",
+                    active
+                      ? "bg-primary-foreground text-primary"
+                      : "bg-primary text-primary-foreground",
+                  )}
+                >
+                  {unreadMessages}
+                </span>
+              ) : null}
             </Link>
           );
         })}
