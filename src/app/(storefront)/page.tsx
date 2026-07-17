@@ -65,9 +65,6 @@ export default async function HomePage() {
               <Button size="lg" asChild>
                 <Link href="/magaza">Koleksiyonu Keşfet</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/hakkimizda">Hikayemiz</Link>
-              </Button>
             </div>
           </div>
           <div className="order-1 lg:order-2">
