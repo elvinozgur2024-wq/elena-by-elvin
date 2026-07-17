@@ -49,13 +49,13 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8 lg:pt-14">
+      <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8 lg:pt-10">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="order-2 lg:order-1">
             <span className="inline-block rounded-full bg-tint-blush px-3 py-1 text-xs font-medium tracking-wide text-mocha uppercase">
               {content.hero_badge}
             </span>
-            <h1 className="mt-4 font-serif text-3xl leading-[1.15] text-foreground sm:text-4xl lg:text-5xl">
+            <h1 className="mt-4 font-serif text-3xl leading-[1.15] text-foreground sm:text-4xl">
               {content.hero_headline}
             </h1>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -68,7 +68,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="order-1 lg:order-2">
-            <div className="animate-float-soft relative aspect-square w-full overflow-hidden rounded-[2.5rem] bg-tint-lavender lg:mx-auto lg:max-w-[520px]">
+            <div className="animate-float-soft relative aspect-square w-full overflow-hidden rounded-[2.5rem] bg-tint-lavender lg:mx-auto lg:max-w-[420px]">
               <Image
                 src={heroImageSrc}
                 alt={content.hero_headline}
