@@ -199,6 +199,38 @@ export default async function HomePage() {
         </section>
       ) : null}
 
+      {/* Brand story teaser — excerpt of /hakkimizda */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8 lg:pt-12">
+        <Reveal>
+          <div className="grid grid-cols-1 items-center gap-10 overflow-hidden rounded-[2.5rem] bg-tint-blush lg:grid-cols-2">
+            <div className="order-2 p-8 lg:order-1 lg:p-12">
+              <span className="text-[11px] uppercase tracking-[0.14em] text-primary">
+                Hikâyemiz
+              </span>
+              <h3 className="mt-3 font-serif text-2xl text-foreground sm:text-3xl">
+                Dünden Bugüne Bir Sevgi Hikâyesi
+              </h3>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                Elena, bir annenin çocukluk anılarından bugünün çocuklarına
+                uzanan sıcacık bir sevgi hikâyesinden doğdu…
+              </p>
+              <Button className="mt-6" variant="outline" asChild>
+                <Link href="/hakkimizda">Hikâyemizi Okuyun</Link>
+              </Button>
+            </div>
+            <div className="relative order-1 aspect-[4/3] w-full lg:order-2 lg:aspect-auto lg:h-full lg:min-h-[360px]">
+              <Image
+                src="/marketing/kid-stars.jpg"
+                alt="Elena peluş yıldız oyuncağıyla oynayan çocuk"
+                fill
+                sizes="(min-width: 1024px) 45vw, 90vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
       {/* Gift strip */}
       <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pt-12">
         <Reveal>
