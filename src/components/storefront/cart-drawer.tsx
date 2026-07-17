@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { EmptyState } from "@/components/storefront/empty-state";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { formatPrice } from "@/lib/format";
 import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
@@ -29,14 +30,20 @@ export function CartDrawer() {
         </SheetHeader>
 
         {items.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
-            <ShoppingBag className="h-10 w-10 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              Sepetiniz henüz boş.
-            </p>
-            <Button asChild onClick={closeCart} className="mt-2">
-              <Link href="/magaza">Alışverişe Başla</Link>
-            </Button>
+          <div className="flex flex-1 flex-col items-center justify-center px-6">
+            <EmptyState
+              compact
+              titleAs="p"
+              title="Sepetin şimdilik boş"
+              description="Sarılmayı bekleyen dostlar var!"
+              tint="#f5e6c8"
+              icon={<ShoppingBag className="h-4 w-4" />}
+              action={
+                <Button asChild onClick={closeCart}>
+                  <Link href="/magaza">Koleksiyonu Keşfet</Link>
+                </Button>
+              }
+            />
           </div>
         ) : (
           <>

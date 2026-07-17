@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Sparkle } from "@phosphor-icons/react/dist/ssr";
+import { Button } from "@/components/ui/button";
 import { CategoryTabs } from "@/components/storefront/category-tabs";
+import { EmptyState } from "@/components/storefront/empty-state";
 import { ProductCard } from "@/components/storefront/product-card";
 import {
   getCategories,
@@ -55,9 +59,18 @@ export default async function ShopCategoryPage({
       </div>
 
       {products.length === 0 ? (
-        <p className="mt-16 text-center text-sm text-muted-foreground">
-          Bu kategoride henüz ürün yok.
-        </p>
+        <EmptyState
+          className="mt-4"
+          title="Yeni dostlar yolda!"
+          description="Bu kategori çok yakında doluyor — bu arada diğer dostlarımıza göz atabilirsin."
+          tint="#dce5d3"
+          icon={<Sparkle className="h-5 w-5" />}
+          action={
+            <Button size="lg" asChild>
+              <Link href="/magaza">Tüm Ürünlere Göz At</Link>
+            </Button>
+          }
+        />
       ) : (
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (

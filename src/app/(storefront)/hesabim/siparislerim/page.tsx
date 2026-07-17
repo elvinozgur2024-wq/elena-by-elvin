@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { Package } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate, formatPrice } from "@/lib/format";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/storefront/empty-state";
 import { OrderStatusBadge } from "@/components/storefront/order-status-badge";
 
 export default async function OrderHistoryPage() {
@@ -23,15 +25,18 @@ export default async function OrderHistoryPage() {
       <h1 className="font-serif text-3xl text-foreground">Siparişlerim</h1>
 
       {!orders || orders.length === 0 ? (
-        <div className="mt-16 flex flex-col items-center gap-3 text-center">
-          <Package className="h-10 w-10 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">
-            Henüz bir siparişiniz yok.
-          </p>
-          <Link href="/magaza" className="text-sm text-primary hover:underline">
-            Alışverişe Başla
-          </Link>
-        </div>
+        <EmptyState
+          className="mt-4"
+          title="Henüz siparişin yok"
+          description="İlk yumuşacık dostunu seçmeye ne dersin?"
+          tint="#d9e8dc"
+          icon={<Package className="h-5 w-5" />}
+          action={
+            <Button size="lg" asChild>
+              <Link href="/magaza">Koleksiyonu Keşfet</Link>
+            </Button>
+          }
+        />
       ) : (
         <ul className="mt-6 flex flex-col gap-3">
           {orders.map((order) => (

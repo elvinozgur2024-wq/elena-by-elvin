@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Minus, Plus, X, ShoppingBag } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { EmptyState } from "@/components/storefront/empty-state";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import { formatPrice } from "@/lib/format";
@@ -23,17 +24,19 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-24 text-center sm:px-6 lg:px-8">
-        <ShoppingBag className="h-12 w-12 text-muted-foreground" />
-        <h1 className="font-serif text-2xl text-foreground">
-          Sepetiniz boş
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Yumuşacık arkadaşlarımıza göz atmaya ne dersiniz?
-        </p>
-        <Button asChild className="mt-2">
-          <Link href="/magaza">Alışverişe Başla</Link>
-        </Button>
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <EmptyState
+          titleAs="h1"
+          title="Sepetin şimdilik boş"
+          description="Sarılmayı bekleyen yumuşacık dostlar seni bekliyor."
+          tint="#f5e6c8"
+          icon={<ShoppingBag className="h-5 w-5" />}
+          action={
+            <Button size="lg" asChild>
+              <Link href="/magaza">Koleksiyonu Keşfet</Link>
+            </Button>
+          }
+        />
       </div>
     );
   }

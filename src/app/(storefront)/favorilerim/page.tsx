@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Heart } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/storefront/empty-state";
 import { ProductCard } from "@/components/storefront/product-card";
 import { useWishlistStore } from "@/lib/wishlist/store";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -28,18 +29,19 @@ export default function FavoritesPage() {
 
   if (products.length === 0) {
     return (
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-24 text-center sm:px-6 lg:px-8">
-        <Heart className="h-12 w-12 text-muted-foreground" />
-        <h1 className="font-serif text-2xl text-foreground">
-          Favori listeniz boş
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Beğendiğiniz ürünleri kalp simgesine tıklayarak buraya
-          ekleyebilirsiniz.
-        </p>
-        <Button asChild className="mt-2">
-          <Link href="/magaza">Alışverişe Başla</Link>
-        </Button>
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <EmptyState
+          titleAs="h1"
+          title="Favori listen henüz boş"
+          description="Beğendiğin dostları kalbe dokunarak burada biriktirebilirsin."
+          tint="#f6ded8"
+          icon={<Heart className="h-5 w-5" />}
+          action={
+            <Button size="lg" asChild>
+              <Link href="/magaza">Koleksiyonu Keşfet</Link>
+            </Button>
+          }
+        />
       </div>
     );
   }
