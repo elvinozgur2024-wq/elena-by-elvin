@@ -29,6 +29,26 @@ function MessageCard({ message }: { message: ContactMessage }) {
     });
   }
 
+  function handleReply(email: string) {
+    const subject = encodeURIComponent("Re: Elenaland iletişim mesajınız");
+    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
+
+    // `mailto:` silently does nothing unless the browser has a mail app
+    // registered — which most Gmail-in-browser users never set up. Open
+    // Gmail's compose window directly instead. window.open must run
+    // synchronously in the click handler (nothing awaited first), or popup
+    // blockers treat it as not user-initiated and block it.
+    window.open(gmailComposeUrl, "_blank", "noopener,noreferrer");
+
+    navigator.clipboard
+      .writeText(email)
+      .then(() => toast.success(`E-posta adresi kopyalandı: ${email}`))
+      .catch(() => {
+        // Clipboard can fail (permissions, insecure context) — the Gmail
+        // tab is already open, so this is a soft failure either way.
+      });
+  }
+
   return (
     <article
       className={cn(
@@ -54,12 +74,13 @@ function MessageCard({ message }: { message: ContactMessage }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
-          <a
-            href={`mailto:${message.email}?subject=${encodeURIComponent("Re: Elenaland iletişim mesajınız")}`}
+          <button
+            type="button"
+            onClick={() => handleReply(message.email)}
             className="flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-xs text-foreground hover:bg-secondary"
           >
             <ArrowBendUpLeft className="h-3.5 w-3.5" /> Yanıtla
-          </a>
+          </button>
           <button
             type="button"
             disabled={isPending}
