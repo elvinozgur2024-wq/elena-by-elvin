@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { CartSyncNotice, useCartSync } from "@/components/storefront/cart-sync";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import { formatPrice } from "@/lib/format";
@@ -22,6 +23,7 @@ const PAYMENTS_LIVE = process.env.NEXT_PUBLIC_PAYMENTS_LIVE === "true";
 export default function CheckoutPage() {
   const { items } = useCartStore();
   const hydrated = useHydrated();
+  const syncResult = useCartSync(true);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -95,6 +97,8 @@ export default function CheckoutPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <h1 className="font-serif text-3xl text-foreground">Ödeme</h1>
+
+      <CartSyncNotice result={syncResult} className="mt-4" />
 
       {!PAYMENTS_LIVE ? (
         <div className="mt-4 rounded-xl border border-primary/30 bg-tint-butter px-4 py-2.5 text-sm text-mocha">

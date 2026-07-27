@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "@/components/storefront/empty-state";
+import { CartSyncNotice, useCartSync } from "@/components/storefront/cart-sync";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { formatPrice } from "@/lib/format";
 import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
@@ -20,6 +21,7 @@ import { productImageUrl, PRODUCT_IMAGE_VERSION } from "@/lib/supabase/storage";
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeItem } =
     useCartStore();
+  const syncResult = useCartSync(isOpen);
   const subtotal = cartSubtotal(items);
 
   return (
@@ -28,6 +30,8 @@ export function CartDrawer() {
         <SheetHeader>
           <SheetTitle>Sepetim</SheetTitle>
         </SheetHeader>
+
+        <CartSyncNotice result={syncResult} className="mx-4" />
 
         {items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center px-6">

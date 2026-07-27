@@ -6,6 +6,7 @@ import { Minus, Plus, X, ShoppingBag } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "@/components/storefront/empty-state";
+import { CartSyncNotice, useCartSync } from "@/components/storefront/cart-sync";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import { formatPrice } from "@/lib/format";
@@ -15,6 +16,7 @@ import { calculateShippingFee, FREE_SHIPPING_THRESHOLD } from "@/lib/checkout/pr
 export default function CartPage() {
   const { items, updateQuantity, removeItem } = useCartStore();
   const hydrated = useHydrated();
+  const syncResult = useCartSync(true);
 
   const subtotal = hydrated ? cartSubtotal(items) : 0;
   const shipping = calculateShippingFee(subtotal);
@@ -25,6 +27,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <CartSyncNotice result={syncResult} className="mx-auto max-w-lg" />
         <EmptyState
           titleAs="h1"
           title="Sepetin şimdilik boş"
@@ -44,6 +47,8 @@ export default function CartPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <h1 className="font-serif text-3xl text-foreground">Sepetim</h1>
+
+      <CartSyncNotice result={syncResult} className="mt-4" />
 
       {remaining > 0 ? (
         <p className="mt-3 rounded-xl bg-tint-sage px-4 py-2.5 text-sm text-mocha">

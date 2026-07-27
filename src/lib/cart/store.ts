@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { ProductWithImages } from "@/types/database.types";
 
 export interface CartItem {
   productId: string;
@@ -13,6 +14,22 @@ export interface CartItem {
   stockQuantity: number;
 }
 
+/** What changed when a persisted cart was reconciled against the catalog. */
+export interface CartSyncResult {
+  priceChanged: { name: string; from: number; to: number }[];
+  quantityReduced: { name: string; to: number }[];
+  removed: string[];
+}
+
+export function hasCartChanges(result: CartSyncResult | null): boolean {
+  if (!result) return false;
+  return (
+    result.priceChanged.length > 0 ||
+    result.quantityReduced.length > 0 ||
+    result.removed.length > 0
+  );
+}
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
@@ -23,6 +40,13 @@ interface CartState {
     variantId: string | null,
     quantity: number,
   ) => void;
+  /**
+   * Reconcile the persisted cart against live catalog rows. Carts live in
+   * localStorage indefinitely with the price frozen at add-time, so without
+   * this a shopper can be shown a stale total and charged the current one
+   * (checkout always recalculates server-side).
+   */
+  syncWithCatalog: (products: ProductWithImages[]) => CartSyncResult;
   clear: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -86,6 +110,72 @@ export const useCartStore = create<CartState>()(
               : line,
           ),
         });
+      },
+
+      syncWithCatalog: (products) => {
+        const byId = new Map(products.map((p) => [p.id, p]));
+        const result: CartSyncResult = {
+          priceChanged: [],
+          quantityReduced: [],
+          removed: [],
+        };
+        const next: CartItem[] = [];
+
+        for (const line of get().items) {
+          // getProductsByIds only returns active products, so a miss means
+          // the product was deleted or hidden since it was added.
+          const product = byId.get(line.productId);
+          if (!product) {
+            result.removed.push(line.name);
+            continue;
+          }
+
+          let unitPrice = Number(product.base_price);
+          let stock = product.stock_quantity;
+
+          if (line.variantId) {
+            const variant = product.product_variants.find(
+              (v) => v.id === line.variantId,
+            );
+            if (!variant) {
+              result.removed.push(line.name);
+              continue;
+            }
+            unitPrice += Number(variant.price_delta);
+            stock = variant.stock_quantity;
+          }
+
+          if (stock <= 0) {
+            result.removed.push(line.name);
+            continue;
+          }
+
+          const quantity = Math.min(line.quantity, stock);
+          if (quantity < line.quantity) {
+            result.quantityReduced.push({ name: product.name, to: quantity });
+          }
+          if (unitPrice !== line.unitPrice) {
+            result.priceChanged.push({
+              name: product.name,
+              from: line.unitPrice,
+              to: unitPrice,
+            });
+          }
+
+          next.push({
+            ...line,
+            name: product.name,
+            slug: product.slug,
+            unitPrice,
+            quantity,
+            stockQuantity: stock,
+          });
+        }
+
+        // Only write when something actually moved — an unconditional set()
+        // would re-render every cart subscriber on each page view.
+        if (hasCartChanges(result)) set({ items: next });
+        return result;
       },
 
       clear: () => set({ items: [] }),
