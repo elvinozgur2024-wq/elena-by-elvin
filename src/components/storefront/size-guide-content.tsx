@@ -1,17 +1,17 @@
 const SIZES = [
   {
     label: "Küçük (S)",
-    height: "15 - 20 cm",
+    height: "5 - 20 cm",
     note: "Anahtarlıklar, parmak kuklalar ve mini peluşlar",
   },
   {
     label: "Orta (M)",
-    height: "25 - 35 cm",
+    height: "20 - 35 cm",
     note: "Standart peluş oyuncaklar ve uyku arkadaşları",
   },
   {
     label: "Büyük (L)",
-    height: "40 - 55 cm",
+    height: "35 - 50 cm",
     note: "Kucaklama peluşları ve dekoratif yastıklar",
   },
 ];
