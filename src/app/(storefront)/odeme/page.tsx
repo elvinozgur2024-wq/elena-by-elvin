@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Gift, ShieldCheck } from "@phosphor-icons/react";
+import { Gift, ShieldCheck, ShoppingBag } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { CartSyncNotice, useCartSync } from "@/components/storefront/cart-sync";
+import { EmptyState } from "@/components/storefront/empty-state";
 import { useCartStore, cartSubtotal } from "@/lib/cart/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import { formatPrice } from "@/lib/format";
@@ -85,11 +86,20 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-24 text-center">
-        <p className="text-sm text-muted-foreground">Sepetiniz boş.</p>
-        <Button asChild className="mt-4">
-          <Link href="/magaza">Alışverişe Başla</Link>
-        </Button>
+      <div className="mx-auto max-w-lg px-4 py-10">
+        <CartSyncNotice result={syncResult} />
+        <EmptyState
+          titleAs="h1"
+          title="Sepetin şimdilik boş"
+          description="Ödemeye geçmek için önce birkaç yumuşacık dost seçelim."
+          tint="#f5e6c8"
+          icon={<ShoppingBag className="h-5 w-5" />}
+          action={
+            <Button size="lg" asChild>
+              <Link href="/magaza">Koleksiyonu Keşfet</Link>
+            </Button>
+          }
+        />
       </div>
     );
   }

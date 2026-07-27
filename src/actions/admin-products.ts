@@ -135,7 +135,21 @@ export async function deleteProduct(productId: string) {
 
   const existingCategory = existing?.category as unknown as { slug: string } | null;
 
+  // The product_images rows cascade with the product, so collect their files
+  // first — otherwise every deleted product leaves its photos behind in the
+  // bucket with nothing referencing them.
+  const { data: images } = await supabase
+    .from("product_images")
+    .select("storage_path")
+    .eq("product_id", productId);
+
   await supabase.from("products").delete().eq("id", productId);
+
+  if (images?.length) {
+    await supabase.storage
+      .from("product-images")
+      .remove(images.map((img) => img.storage_path));
+  }
 
   revalidatePath("/admin/urunler");
   revalidatePath("/");

@@ -51,14 +51,25 @@ export async function POST(request: Request) {
     const result = await retrieveCheckoutForm(token, order.id);
 
     if (result.status === "success" && result.paymentStatus === "SUCCESS") {
-      await admin
+      // Claim the order atomically: the `neq` turns this into a conditional
+      // update, so of two concurrent callbacks (iyzico retries) exactly one
+      // matches a row. The earlier `status === "paid"` check above is a fast
+      // path, not a guard — without this the stock loop below could run twice.
+      const { data: claimed } = await admin
         .from("orders")
         .update({
           status: "paid",
           iyzico_payment_id: result.paymentId ?? null,
           payment_raw_response: result.raw,
         })
-        .eq("id", order.id);
+        .eq("id", order.id)
+        .neq("status", "paid")
+        .select("id");
+
+      if (!claimed || claimed.length === 0) {
+        // A concurrent callback already finalized it and decremented stock.
+        return redirect(`/odeme/basarili?order=${order.order_number}`);
+      }
 
       // Decrement stock now that payment is confirmed — pending/abandoned
       // orders never hold stock hostage.

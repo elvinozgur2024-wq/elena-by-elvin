@@ -18,11 +18,28 @@ export default function FavoritesPage() {
 
   useEffect(() => {
     if (!hydrated) return;
-    if (productIds.length === 0) {
-      setProducts([]);
-      return;
-    }
-    getProductsByIds(productIds).then(setProducts);
+    let cancelled = false;
+
+    // Always resolve through a promise — a synchronous setState here would
+    // cascade renders (and trips react-hooks/set-state-in-effect). The
+    // cancelled flag stops a slow earlier request from overwriting a newer
+    // result when the wishlist changes mid-flight.
+    const pending =
+      productIds.length === 0
+        ? Promise.resolve<ProductWithImages[]>([])
+        : getProductsByIds(productIds);
+
+    pending
+      .then((data) => {
+        if (!cancelled) setProducts(data);
+      })
+      .catch(() => {
+        if (!cancelled) setProducts([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [hydrated, productIds]);
 
   if (!hydrated || products === null) return null;

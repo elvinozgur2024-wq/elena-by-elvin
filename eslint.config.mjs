@@ -15,6 +15,15 @@ const eslintConfig = defineConfig([
     // Claude Code skills/config, not part of the app:
     ".claude/**",
   ]),
+  {
+    // One-off CommonJS maintenance scripts (image processing, seeding). They
+    // run under plain `node`, never ship in the bundle, and require() is the
+    // correct module syntax for them.
+    files: ["scripts/**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

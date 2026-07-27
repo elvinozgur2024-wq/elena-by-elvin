@@ -31,12 +31,11 @@ export async function POST(request: Request) {
   try {
     return await handleCheckout(request);
   } catch (err) {
+    // Log the detail server-side only — the message can carry database and
+    // provider internals, so it must never reach the browser.
     console.error("iyzico checkout route crashed:", err);
     return NextResponse.json(
-      {
-        error: "Beklenmedik bir hata oluştu",
-        debug: err instanceof Error ? err.message : String(err),
-      },
+      { error: "Beklenmedik bir hata oluştu, lütfen tekrar deneyin" },
       { status: 500 },
     );
   }

@@ -128,7 +128,23 @@ export async function uploadCategoryImage(
 
 export async function deleteCategory(categoryId: string) {
   const supabase = await createClient();
+
+  // Grab the category photo before the row goes, so it doesn't linger in the
+  // bucket unreferenced.
+  const { data: category } = await supabase
+    .from("categories")
+    .select("image_path")
+    .eq("id", categoryId)
+    .maybeSingle();
+
   await supabase.from("categories").delete().eq("id", categoryId);
+
+  if (category?.image_path) {
+    await supabase.storage
+      .from("product-images")
+      .remove([category.image_path]);
+  }
+
   revalidatePath("/");
   revalidatePath("/magaza");
   revalidatePath("/admin/kategoriler");
