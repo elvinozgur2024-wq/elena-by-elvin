@@ -6,7 +6,7 @@ import { getCategories, getProducts } from "@/lib/data/products";
 export const metadata: Metadata = {
   title: "Mağaza",
   description:
-    "Elena By Elvin peluş oyuncak koleksiyonunu keşfedin — ayılar, deniz canlıları, uyku arkadaşları ve daha fazlası.",
+    "Elenaland peluş oyuncak koleksiyonunu keşfedin — ayılar, deniz canlıları, uyku arkadaşları ve daha fazlası.",
   alternates: { canonical: "/magaza" },
 };
 export const revalidate = 3600;

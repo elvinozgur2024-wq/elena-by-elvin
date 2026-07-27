@@ -6,7 +6,7 @@ const DEFAULTS: SiteContent = {
   hero_badge: "Yeni Sezon",
   hero_headline: "Sarılmaya değer yumuşacık anılar",
   hero_subheadline:
-    "Elena By Elvin, bebeğinizin ilk gülüşlerine eşlik edecek özenle seçilmiş peluş oyuncaklar sunar. Her biri sevgiyle tasarlandı, sarılmak için can atıyor.",
+    "Elenaland, bebeğinizin ilk gülüşlerine eşlik edecek özenle seçilmiş peluş oyuncaklar sunar. Her biri sevgiyle tasarlandı, sarılmak için can atıyor.",
   hero_image_path: null,
   gift_badge: "Elenaland Hediye Paketi",
   gift_headline: "Sevdiklerinize özel bir sürpriz hazırlayın",

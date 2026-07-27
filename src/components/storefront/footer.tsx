@@ -101,7 +101,7 @@ export function Footer() {
             Çamlık Cad. No:148 A, Osmangazi / BURSA
           </p>
           <p className="mt-1">
-            © {new Date().getFullYear()} Elena By Elvin. Tüm hakları saklıdır.
+            © {new Date().getFullYear()} Elenaland. Tüm hakları saklıdır.
           </p>
         </div>
       </div>

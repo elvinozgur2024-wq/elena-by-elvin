@@ -8,7 +8,7 @@ export function Logo({ className }: { className?: string }) {
       // master: every usage renders at h-12 (≈126px), and images are served
       // unoptimized, so the file that ships must already be the right size.
       src="/brand/elenaland-logo.webp"
-      alt="Elena By Elvin"
+      alt="Elenaland"
       width={512}
       height={195}
       priority

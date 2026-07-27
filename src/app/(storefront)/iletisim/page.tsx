@@ -10,7 +10,7 @@ import { INSTAGRAM_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "İletişim",
-  description: "Elena By Elvin ile iletişime geçin — sorularınız için buradayız.",
+  description: "Elenaland ile iletişime geçin — sorularınız için buradayız.",
   alternates: { canonical: "/iletisim" },
 };
 

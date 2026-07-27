@@ -55,7 +55,7 @@ function MessageCard({ message }: { message: ContactMessage }) {
 
         <div className="flex shrink-0 items-center gap-1">
           <a
-            href={`mailto:${message.email}?subject=${encodeURIComponent("Re: Elena By Elvin iletişim mesajınız")}`}
+            href={`mailto:${message.email}?subject=${encodeURIComponent("Re: Elenaland iletişim mesajınız")}`}
             className="flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-xs text-foreground hover:bg-secondary"
           >
             <ArrowBendUpLeft className="h-3.5 w-3.5" /> Yanıtla

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Kargo & İade",
-  description: "Elena By Elvin kargo süreleri ve iade koşulları hakkında bilgi alın.",
+  description: "Elenaland kargo süreleri ve iade koşulları hakkında bilgi alın.",
   alternates: { canonical: "/kargo-ve-iade" },
 };
 

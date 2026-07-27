@@ -20,9 +20,9 @@ const inter = Inter({
 });
 
 const DEFAULT_DESCRIPTION =
-  "Elena By Elvin — bebekler ve çocuklar için özenle tasarlanmış, yumuşacık peluş oyuncaklar ve uyku arkadaşları.";
+  "Elenaland — bebekler ve çocuklar için özenle tasarlanmış, yumuşacık peluş oyuncaklar ve uyku arkadaşları.";
 const DEFAULT_OG_IMAGE = "/marketing/hero-whale.jpg";
-const DEFAULT_TITLE = "Elena By Elvin | Sevimli Peluş Oyuncaklar";
+const DEFAULT_TITLE = "Elenaland | Sevimli Peluş Oyuncaklar";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

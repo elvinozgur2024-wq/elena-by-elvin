@@ -3,7 +3,7 @@ import { productImageUrl } from "@/lib/supabase/storage";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-export const SITE_NAME = "Elena By Elvin";
+export const SITE_NAME = "Elenaland";
 export const INSTAGRAM_URL = "https://www.instagram.com/elenababywear";
 
 export function absoluteUrl(path: string): string {

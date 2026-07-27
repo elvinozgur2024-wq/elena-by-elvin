@@ -4,7 +4,7 @@ import { SizeGuideContent } from "@/components/storefront/size-guide-content";
 export const metadata: Metadata = {
   title: "Beden Rehberi",
   description:
-    "Elena By Elvin peluş oyuncakları için boy ve ölçü rehberi — Küçük, Orta ve Büyük boy seçenekleri.",
+    "Elenaland peluş oyuncakları için boy ve ölçü rehberi — Küçük, Orta ve Büyük boy seçenekleri.",
   alternates: { canonical: "/beden-rehberi" },
 };
 
