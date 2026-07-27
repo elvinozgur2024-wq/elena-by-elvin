@@ -9,6 +9,10 @@ export function Logo({ className }: { className?: string }) {
       width={2431}
       height={928}
       priority
+      // Every usage renders at h-12 (≈126px wide). Without `sizes`, Next
+      // derives the srcset from the 2431px intrinsic width and browsers
+      // fetch the 3840px variant (~49KB) for a 126px logo.
+      sizes="130px"
       className={cn("h-12 w-auto", className)}
     />
   );

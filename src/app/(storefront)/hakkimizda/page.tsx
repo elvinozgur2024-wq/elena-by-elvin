@@ -71,7 +71,7 @@ export default function AboutPage() {
         <p className="font-serif text-xl text-mocha sm:text-2xl">
           Elenaland’e hoş geldiniz.
         </p>
-        <p className="mt-3 text-sm italic text-mocha/80">
+        <p className="mt-3 text-sm text-mocha/80">
           Bir gülümsemeden ilhamla, minik kalpler için tasarlandı.
         </p>
       </div>

@@ -7,8 +7,11 @@ import "./globals.css";
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  // Fraunces is only used for headings, and every one of them renders at
+  // 400 — nothing in the app applies font-medium/semibold to a serif
+  // element, so 500/600 and the italic set were pure download weight.
+  weight: ["400"],
+  style: ["normal"],
 });
 
 const inter = Inter({
