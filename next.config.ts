@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Vercel's image optimizer started returning 402 (quota exhausted) for
+    // every transform, which broke images site-wide. We don't need it: the
+    // admin upload pipeline already resizes to <=1600px and encodes WebP
+    // q82 (avg ~63KB), and the logo ships pre-sized. Serving the stored
+    // files directly removes the dependency and the recurring bill.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

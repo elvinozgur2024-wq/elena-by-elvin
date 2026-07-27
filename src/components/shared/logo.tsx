@@ -4,15 +4,14 @@ import { cn } from "@/lib/utils";
 export function Logo({ className }: { className?: string }) {
   return (
     <Image
-      src="/brand/elenaland-logo.png"
+      // Pre-sized WebP (512px wide, 16KB) rather than the 2431px/351KB
+      // master: every usage renders at h-12 (≈126px), and images are served
+      // unoptimized, so the file that ships must already be the right size.
+      src="/brand/elenaland-logo.webp"
       alt="Elena By Elvin"
-      width={2431}
-      height={928}
+      width={512}
+      height={195}
       priority
-      // Every usage renders at h-12 (≈126px wide). Without `sizes`, Next
-      // derives the srcset from the 2431px intrinsic width and browsers
-      // fetch the 3840px variant (~49KB) for a 126px logo.
-      sizes="130px"
       className={cn("h-12 w-auto", className)}
     />
   );

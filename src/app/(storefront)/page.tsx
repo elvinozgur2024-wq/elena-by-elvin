@@ -44,7 +44,7 @@ export default async function HomePage() {
     : "/marketing/hero-whale.jpg";
   const giftImageSrc = content.gift_image_path
     ? `${productImageUrl(content.gift_image_path)}?v=${encodeURIComponent(content.updated_at)}`
-    : "/marketing/gift-box.jpg";
+    : "/marketing/gift-box.webp";
 
   return (
     <div>
@@ -217,7 +217,7 @@ export default async function HomePage() {
             </div>
             <div className="relative order-1 aspect-[4/3] w-full lg:order-2 lg:aspect-auto lg:h-full lg:min-h-[360px]">
               <Image
-                src="/marketing/kid-stars.jpg"
+                src="/marketing/kid-stars.webp"
                 alt="Elena peluş yıldız oyuncağıyla oynayan çocuk"
                 fill
                 sizes="(min-width: 1024px) 45vw, 90vw"

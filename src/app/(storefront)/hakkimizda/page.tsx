@@ -18,7 +18,7 @@ export default function AboutPage() {
       <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
         <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-tint-butter">
           <Image
-            src="/marketing/kid-stars.jpg"
+            src="/marketing/kid-stars.webp"
             alt="Elena peluş yıldız oyuncağıyla oynayan çocuk"
             fill
             sizes="(min-width: 1024px) 45vw, 90vw"
