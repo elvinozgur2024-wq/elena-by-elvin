@@ -8,6 +8,7 @@ import {
   MagnifyingGlass,
   ShoppingBag,
   User,
+  Wrench,
   X,
 } from "@phosphor-icons/react";
 import { Logo } from "@/components/shared/logo";
@@ -42,6 +43,13 @@ export function Header({ categories }: { categories: Category[] }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
+      <div className="border-b border-border bg-tint-butter">
+        <p className="mx-auto flex max-w-7xl items-center justify-center gap-1.5 px-4 py-2 text-center text-[11px] font-medium tracking-wide text-mocha sm:px-6 lg:px-8">
+          <Wrench className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          Sitemiz yapım aşamasındadır.
+        </p>
+      </div>
+
       <div className="border-b border-border bg-secondary/60">
         <p className="mx-auto max-w-7xl px-4 py-2 text-center text-[11px] tracking-wide text-muted-foreground sm:px-6 lg:px-8">
           {formatPrice(FREE_SHIPPING_THRESHOLD)} üzeri siparişlerde ücretsiz
