@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/shared/logo";
 import { WaveDivider } from "@/components/storefront/wave-divider";
-import { InstagramLogo } from "@phosphor-icons/react/dist/ssr";
+import { InstagramLogo, Wrench } from "@phosphor-icons/react/dist/ssr";
 import { INSTAGRAM_URL } from "@/lib/seo";
 
 export function Footer() {
@@ -95,7 +95,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6 text-xs leading-relaxed text-muted-foreground">
+        <div className="mt-10 flex justify-center">
+          <p className="inline-flex items-center gap-2 rounded-full bg-tint-butter px-4 py-2 text-xs text-mocha">
+            <Wrench className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            Sitemiz yapım aşamasındadır.
+          </p>
+        </div>
+
+        <div className="mt-8 border-t border-border pt-6 text-xs leading-relaxed text-muted-foreground">
           <p>
             Elena Babywear Tekstil San. ve Tic. Ltd. Şti. — Güneştepe Mah.
             Çamlık Cad. No:148 A, Osmangazi / BURSA
