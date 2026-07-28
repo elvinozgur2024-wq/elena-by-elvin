@@ -59,6 +59,7 @@ function parseProductForm(formData: FormData) {
     sku: formData.get("sku"),
     stock_quantity: formData.get("stock_quantity"),
     size: formData.get("size") || undefined,
+    sitting_height: formData.get("sitting_height") || undefined,
     care_instructions: formData.get("care_instructions") || undefined,
     is_active: formData.get("is_active") === "on",
     is_featured: formData.get("is_featured") === "on",
