@@ -71,7 +71,16 @@ export function ProductCard({
             alt={primaryImage.alt_text ?? product.name}
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+            className={cn(
+              "object-cover [transition:transform_700ms_cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none",
+              // Once a second photo exists, this layer also needs to fade
+              // OUT in sync with the hover layer fading in — otherwise the
+              // crossfade is really just an opaque photo sitting underneath
+              // a fade-in, which reads as a hard cut once the top image is
+              // fully opaque instead of a true dissolve between the two.
+              hoverImage &&
+                "[transition:opacity_900ms_cubic-bezier(0.22,1,0.36,1),transform_700ms_cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0",
+            )}
           />
         ) : null}
 
@@ -82,7 +91,7 @@ export function ProductCard({
             aria-hidden
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-cover opacity-0 transition-[opacity,transform] duration-500 ease-out group-hover:scale-[1.04] group-hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
+            className="object-cover opacity-0 [transition:opacity_900ms_cubic-bezier(0.22,1,0.36,1),transform_700ms_cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
           />
         ) : null}
 
