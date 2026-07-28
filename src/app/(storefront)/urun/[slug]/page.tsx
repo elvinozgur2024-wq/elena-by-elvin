@@ -130,27 +130,12 @@ export default async function ProductPage({
             />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4">
+          <div className="mt-6 flex items-center gap-4">
             <SizeGuideDialog />
-            {product.size || product.sitting_height ? (
-              <div className="flex flex-col gap-0.5 text-sm text-muted-foreground">
-                {product.size ? (
-                  <p>
-                    <span className="font-medium text-foreground">
-                      Ölçüler:
-                    </span>{" "}
-                    {product.size}
-                  </p>
-                ) : null}
-                {product.sitting_height ? (
-                  <p>
-                    <span className="font-medium text-foreground">
-                      Oturma Yüksekliği:
-                    </span>{" "}
-                    {product.sitting_height}
-                  </p>
-                ) : null}
-              </div>
+            {product.size ? (
+              <span className="text-sm text-muted-foreground">
+                Bu ürün: {product.size}
+              </span>
             ) : null}
           </div>
 

@@ -127,24 +127,11 @@ export function ProductForm({
           />
         </div>
         <div>
-          <Label htmlFor="size">Ölçüler (ör. 15 x 6 x 6 cm)</Label>
+          <Label htmlFor="size">Boy (ör. Orta (M) — 30 cm)</Label>
           <Input
             id="size"
             name="size"
-            placeholder="15 x 6 x 6 cm"
             defaultValue={product?.size ?? undefined}
-            className="mt-1.5"
-          />
-        </div>
-        <div>
-          <Label htmlFor="sitting_height">
-            Oturma Yüksekliği (ör. 9 cm, opsiyonel)
-          </Label>
-          <Input
-            id="sitting_height"
-            name="sitting_height"
-            placeholder="9 cm"
-            defaultValue={product?.sitting_height ?? undefined}
             className="mt-1.5"
           />
         </div>

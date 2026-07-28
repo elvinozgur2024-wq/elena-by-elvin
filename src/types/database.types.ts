@@ -47,7 +47,6 @@ export interface Product {
   sku: string;
   stock_quantity: number;
   size: string | null;
-  sitting_height: string | null;
   care_instructions: string | null;
   is_active: boolean;
   is_featured: boolean;

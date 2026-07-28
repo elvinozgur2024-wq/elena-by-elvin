@@ -11,7 +11,6 @@ export const productSchema = z.object({
   sku: z.string().min(2, "SKU giriniz"),
   stock_quantity: z.coerce.number().int().min(0),
   size: z.string().optional(),
-  sitting_height: z.string().optional(),
   care_instructions: z.string().optional(),
   is_active: z.boolean(),
   is_featured: z.boolean(),
